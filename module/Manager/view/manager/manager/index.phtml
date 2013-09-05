@@ -1,0 +1,34 @@
+<?php
+$title = 'Admin Manager Login';
+//$this->headTitle($title);
+?>
+<h1><?php //echo $this->escapeHtml($title); ?></h1>
+
+<?php
+
+$form = $this->form;
+$form->setAttribute('action', $this->url('manager', array('action' => 'index')));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+
+?>
+<center>
+<table> 
+	<tr>
+		<td><?php echo $this->formlabel($form->get('username'));?></td>
+		<td><?php echo $this->forminput($form->get('username'));?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->formlabel($form->get('password'));?></td>
+		<td><?php echo $this->forminput($form->get('password'));?></td>
+	</tr>
+	<tr>
+		<td colspan="2"><?php echo $this->formSubmit($form->get('submit')); ?></td>
+	</tr>
+</table>
+</center>
+<?php 
+
+echo $this->form()->closeTag();
+?>

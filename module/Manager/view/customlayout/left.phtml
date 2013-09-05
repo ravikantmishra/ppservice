@@ -1,0 +1,40 @@
+<?php 
+use Zend\Session\Container;
+echo $this->doctype();
+$container = new Container('namespace');
+$data= $container->adminsession;
+if($data)
+{
+?>
+<table width="100%" style="border-color:#6495ED;border-style:solid; border-width:1px; height:505px;">
+<tr>
+<td>
+<a href="<?php echo $this->url('manager',array('action'=>'adduser')) ?>">User Management</a>
+</td>
+</tr>
+		<tr>
+		<td class="active">
+		<a href="<?php echo $this->url('manager',array('action'=>'adminuser')) ?>">Admin management</a>
+		</td>
+		</tr>
+		<tr>
+		<td class="active">
+		<a href="<?php echo $this->url('manager',array('action'=>'displayuser')) ?>">Individual management</a>
+		</td>
+		</tr>
+		<tr>
+		<td class="active">
+		<a href="<?php echo $this->url('manager',array('action'=>'displayuser')) ?>">order management</a>
+		</td>
+		</tr>
+
+		<tr>
+		<td class="active">
+		<a href="<?php echo $this->url('manager',array('action'=>'logout')) ?>">Logout</a>
+	</td>
+	</tr>
+<?php
+}
+?>		
+</table>
+
