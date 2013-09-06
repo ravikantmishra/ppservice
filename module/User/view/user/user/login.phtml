@@ -27,7 +27,6 @@
 <?php
 $form = $this->loginForm;
 $form->setAttribute('action', $this->url('login') );
-// $form->setAttribute('onsubmit', 'return fncSubmit()');
 $form->prepare();
 
 echo $this->form()->openTag($form);
@@ -61,7 +60,7 @@ echo $this->form()->openTag($form);
          
         </td>
       </tr>
-	  <tr><td></td><td> <div>                      <a class="anchor_link" href="http://passportservicesllc.com/index.php/forgetPassword">Forgot your password?</a>
+	  <tr><td></td><td> <div>                      <a class="anchor_link" href="<?php  echo $this->url('forgetPassword'); ?>">Forgot your password?</a>
           
         <div>             <a class="anchor_link" href="<?php  echo $this->url('register'); ?>">Register Here</a>
           </div></div></td></tr>

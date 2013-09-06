@@ -93,15 +93,5 @@ class RegisterForm extends Form
 						'class' => 'btnArea',
 				),
 		));
-		
-		$this->add(array(
-				'name' => 'back',
-				'attributes' => array(
-						'type'  => 'button',
-						'value' => 'Go',
-						'id' => 'backbutton',
-						'class' => 'btnArea',
-				),
-		));
 	}
 }
