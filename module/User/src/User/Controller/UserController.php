@@ -32,12 +32,7 @@ class UserController extends AbstractActionController {
 	
 	// login action 
 	public function loginAction() {
-		
-		$session = new Container();
-		if ( $session->offsetExists('frontidsession') ) {
-			// to do unset the session
-		}
-		
+
 		$form = new LoginForm();
 		$form->get('submit')->setValue('Sign In');
 		
@@ -53,7 +48,7 @@ class UserController extends AbstractActionController {
 					return  $this->redirect()->toRoute('home');
 				}
 				else{
-					$this->redirect()->toRoute('login');					
+// 					$this->redirect()->toRoute('login');					
 				}
 			}
 		}
@@ -76,11 +71,18 @@ class UserController extends AbstractActionController {
 
 			if ($form->isValid()) {
 				$userObj->exchangeArray($form->getData());
-				
+				$this->getUserTable()->saveUser($userObj);
 				$this->redirect()->toRoute('home');
 			}
 		}
 		
 		return array('registerForm' => $form);
+	}
+	
+	// unset the session so that image get chaange in application module header layout 
+	public function logoutAction() {		
+		SESSION_START();
+		UNSET($_SESSION['user']);
+		RETUrn $this->redirect()->toRoute('home');
 	}
 }

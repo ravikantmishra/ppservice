@@ -31,6 +31,12 @@ class UserTable {
 		);
 		
 		$this->tableGateway->insert ( $data );
+		$lastId = $this->adapter->getDriver()->getLastGeneratedValue();
+		 
+		$user_session = new Container('user');
+		$user_session->frontidsession = $lastId;
+		
+		die($lastId);
 	}
 	
 	public function getRegisterUserName($formValue) {
@@ -58,8 +64,8 @@ class UserTable {
 			if (md5(utf8_encode($login->password)) == $row->password) {
 
 				$user_session = new Container('user');
-				$user_session->frontidsession = $login->id;
-								
+				$user_session->frontidsession = $row->id;
+			
 				return true;
 			} else {
 				return false;

@@ -23,6 +23,16 @@ return array(
 										),
 								),
 						),
+						'logout' => array(
+								'type'    => 'segment',
+								'options' => array(
+										'route'    => '/logout',
+										'defaults' => array(
+												'controller' => 'User\Controller\User',
+												'action'     => 'logout',
+										),
+								),
+						),
 						'register' => array(
 								'type'    => 'segment',
 								'options' => array(
