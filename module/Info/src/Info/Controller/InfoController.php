@@ -16,6 +16,11 @@ class InfoController extends AbstractActionController
     }
     Public function howtoapplyAction()
     {
-    	 
+    	return new ViewModel(); 
     }
+    Public function termsofuseAction()
+    {
+    
+    }
+    
 }
