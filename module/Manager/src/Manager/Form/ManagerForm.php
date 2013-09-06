@@ -1,4 +1,7 @@
 <?php 
+
+
+
 namespace manager\Form;
 use Zend\Form\Form;
 class ManagerForm extends Form
@@ -42,7 +45,9 @@ class ManagerForm extends Form
                 'type'  => 'submit',
                 'value' => 'Submit',
                 'id' => 'submitbutton',
+            	'class'=>'btnArea',
             ),
         ));
+    
     }
 }

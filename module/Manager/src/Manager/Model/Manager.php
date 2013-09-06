@@ -1,24 +1,26 @@
 <?php 
+/*
+ * Organization: OSSCube
+ * Added: Vinod K Maurya
+ * Scope: Class use for  server side validation
+ * Dated: 05-09-2013
+ */
+
 namespace Manager\Model;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-
 class Manager
 {
     public $id;
     public $username;
     public $password;
-   
-    
-
     public function exchangeArray($data)
     {
         $this->id     = (isset($data['id'])) ? $data['id'] : null;
         $this->username = (isset($data['username'])) ? $data['username'] : null;
         $this->password  = (isset($data['password'])) ? $data['password'] : null;
-       
     }
     
     public function getArrayCopy()
@@ -26,13 +28,10 @@ class Manager
         return get_object_vars($this);
     }
     
-    
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
-    
-   
 
     public function getInputFilter()
     {
@@ -86,21 +85,10 @@ class Manager
                     ),
                 ),
             )));
-            
-            
-           
 
             $this->inputFilter = $inputFilter;
         }
 
         return $this->inputFilter;
     }
-    
-    
-    
-    
-   
-    
-    
-    
 }
