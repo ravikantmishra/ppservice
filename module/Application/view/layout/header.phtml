@@ -2,7 +2,22 @@
 <div class="header">
   <div class="header_top_section">
     <div class="logo"><a href="http://passportservicesllc.com/index.php/home"><img alt="Passport Services LLC Logo" src="<?php $this->basepath('public')?>/images/logo_psl.png" border="0"></a><a></a></div><a>
-	</a><div class="login_logout_section"><a></a><a href="http://passportservicesllc.com/index.php/login"><img alt="Login" src="<?php $this->basepath('public')?>/images/login_img.png"></a>
+	</a><div class="login_logout_section"><a></a>
+	
+	
+	<?php 
+// 	session_start();
+	if(!isset($_SESSION['user'])) {
+	?>
+	<a href="<?php echo $this->url('login'); ?>">
+	<img alt="Login" src="<?php $this->basepath('public')?>/images/login_img.png"></a>
+	<?php 
+	}else {
+	?>
+	<a href="<?php echo $this->url('login'); ?>">
+	<img alt="Login" src="<?php $this->basepath('public')?>/images/logout_img.png"></a>
+	<?php }?>
+	
     </div>
   </div>
 </div>

@@ -1,10 +1,6 @@
 <?php
-
-//module/SanAuth/src/SanAuth/Model/MyAuthStorage.php
 namespace Manager\Model;
-
 use Zend\Authentication\Storage;
-
 class MyAuthStorage extends Storage\Session
 {
     public function setRememberMe($rememberMe = 0, $time = 1209600)

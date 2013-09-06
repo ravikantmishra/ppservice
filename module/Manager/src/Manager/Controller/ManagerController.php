@@ -1,11 +1,9 @@
 <?php 
-/* 
+/* Organization: OSSCube
  * Added:  Vinod Maurya 
  * Scope:  Admin login Class
  * Dated: 03/09/2013
- * 
  * */
-
 namespace Manager\Controller;
 use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -16,17 +14,13 @@ use Manager\Form\ManagerForm;
 use Zend\Session\Config\StandardConfig;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
-use Blog\Controller\ViewController;
-
 class ManagerController extends AbstractActionController
 {
-
 	protected $managerTable;
 	protected $form;
 	protected $storage;
 	protected $authservice;
 
-	
 	public function getAuthService()
     {
         if (! $this->authservice) {
@@ -37,7 +31,10 @@ class ManagerController extends AbstractActionController
         return $this->authservice;
     }
 	
-	
+    /*
+     *  Function use for getting the object of manager table class
+     */
+    
     public function getManagerTable()
     {
         if (!$this->managerTable) {
@@ -48,7 +45,10 @@ class ManagerController extends AbstractActionController
         return $this->managerTable;
     }
 
-
+    /*
+     *  Function use for getting the object of manager table class
+    */
+   
 	   public function getSessionStorage()
     {
         if (! $this->storage) {
@@ -70,51 +70,40 @@ class ManagerController extends AbstractActionController
         return $this->form;
     }
 
-	
-	public function loginAction()
-    {
-	
-        //if already login, redirect to success page 
-        if ($this->getAuthService()->hasIdentity()){
-            return $this->redirect()->toRoute('success');
-        }
-                
-        $form       = $this->getForm();
-        
-        return array(
-            'form'      => $form,
-            'messages'  => $this->flashmessenger()->getMessages()
-        );
-    }
-	
-	
+
+ 
+    
+    /*
+     * Function use for redirect the page after login
+    */
+    
     function successAction()
     {
     	$container = new Container('namespace');
         $container->adminsession;
         if ($container->adminsession)
     	{
-    	
 			$messages="Welcome to administrator";
     	}
     	else
     	{
     		$messages="Sorry Your username or password is incorrect";
-    		
+    		return $this->redirect()->toRoute('manager', array('action' => 'index','flashMessages'=> $this->flashmessenger()->getMessages()));
     	}
-
-	    $this->flashmessenger()->addMessage($messages);
 	    
+    	$this->flashmessenger()->addMessage($messages);
     	return array(
-    			 
     			'flashMessages'  => $this->flashmessenger()->getMessages()
-    	);	
-    	
-    }
-    
+    	);
+    } 
     
     
 
+    /*
+     * Function use for check the username and password for admin login
+    */
+    
+    
   public function indexAction()
   {
 	   if ($this->getAuthService()->hasIdentity())
@@ -133,14 +122,8 @@ class ManagerController extends AbstractActionController
 			$authAdapter= $this->getAuthService()->getAdapter()
                           ->setIdentity($request->getPost('username'))
                            ->setCredential($request->getPost('password'));
-                                       
              $result = $this->getAuthService()->authenticate();
              $resultnew= $authAdapter->getResultRowObject();
-//              foreach($result->getMessages() as $message)
-//               {
-//                 $this->flashmessenger()->addMessage($message);
-//              }
-            
                 if ($result->isValid()) {
 					if ($this->getAuthService()->hasIdentity())
 					{
@@ -149,7 +132,6 @@ class ManagerController extends AbstractActionController
 					  $manager = new SessionManager($config);
 					  $container = new Container('namespace');
 					  $container->adminsession = $adminsession;
-
 					  $messages="Welcome to administrator";
 					  $this->flashmessenger()->addMessage($messages);
 					  return $this->redirect()->toRoute('manager', array('action' => 'success'));
@@ -162,54 +144,48 @@ class ManagerController extends AbstractActionController
                 {
                 	
                 	$message="Your username and password Incorrect";
-                	return $this->redirect()->toRoute('manager', array('action' => 'index'));
-                	
-				}
-             }
+                	$this->flashmessenger()->addMessage($message);
+                	$this->flashmessenger()->getMessages();
+           			
+				 }
+	
+				 return $this->redirect()->toRoute('manager', array('action' => 'index'));
+              }
+              
+              
+              
 			}
 	 			 return array('form' => $form);
-   			 }
-    
-   			 
-   			 
-   			 
- 	
+  		}
+
+
+  	/*
+  	 * Function use for add user Action
+  	 */
+  		
+  		
     public function adduserAction()
     {
     	
     	$container = new Container('namespace');
         $container->adminsession;
-        if ($container->adminsession)
-        {
-        	$messages="Welcome to administrator";
-        }
-        else
-        {
-        	$messages="Sorry Your username or password is incorrect";
-        }
-        $this->flashmessenger()->addMessage($messages);
-    		
     }
+    
+    
+    /*
+     * Function use for admin user Action
+    */
     
     
     public function adminuserAction()
     {
 		$container = new Container('namespace');
         $container->adminsession;
-    	if ($container->adminsession)
-    	{
-    		$messages="Welcome to administrator";
-    	}
-    	else
-    	{
-    		$messages="Sorry Your username or password is incorrect";
-    	}
-    	$this->flashmessenger()->addMessage($messages);
-    	
-    	
-    	
     }
     
+    /*
+     * Function use for admin session logout
+    */
     
 	
 	public function logoutAction()
@@ -223,10 +199,7 @@ class ManagerController extends AbstractActionController
             $manager->destroy();
             $this->flashmessenger()->addMessage("You've been logout");
         }
-        
         return $this->redirect()->toRoute('manager');
     }
-
-
 
 }

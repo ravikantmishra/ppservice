@@ -235,3 +235,14 @@ width:668px;
 .data_grid tr.odd:hover{ background:#b8dcb2; color:#ffffff;}
 .data_grid tr.even:hover{ background:#b8dcb2; color:#ffffff;}
 .alertBox {background-color:#FFC;border:1px solid #FC3;color:#F60;margin:0px auto;clear:both;padding:4px;text-align:center;font-size:16px;font-weight:bold}
+
+.adminlogin
+{
+ color:#CC9900;
+ border-style:solid; 
+ border-color:#000 #000; 
+ width:60px; 
+ height:120px; 
+ margin-top:40px;
+}
+

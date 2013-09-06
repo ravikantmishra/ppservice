@@ -1,4 +1,12 @@
 <?php 
+/*
+* Organization: OSSCube
+* Added: Vinod K Maurya
+* Scope: Class use for  fetch data from database
+* Dated: 05-09-2013
+*/
+
+
 namespace Manager\Model;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway;

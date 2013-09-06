@@ -1,18 +1,12 @@
 <table align="center">
 <tr>
 <td>
-
 <?php 
-
 if(count($flashMessages)) : ?>
-<ul>
     <?php foreach ($flashMessages as $msg) : ?>
-    <li><?php echo $msg; ?></li>
+	  <p>  <?php echo $msg; ?></p>
     <?php endforeach; ?>
-</ul>
-<?php endif; ?>
-
-
+	<?php endif; ?>
 </td>
 </tr>
 </table>
