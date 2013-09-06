@@ -1,4 +1,10 @@
 <?php
+/*
+ * Organization: OSSCube
+* Added: Sanchit Puri
+* Scope: Coomunicate module controller for Contact Us and Feedback
+* Dated: 05-09-2013
+*/
 namespace Communicate\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -9,98 +15,98 @@ class CommunicateController extends AbstractActionController
 	protected $_contactTable;
 	protected $_feedbackTable;
 	
+	// returns the object of ContactTable model class
 	public function getContactTable()
 	{
-		if (! $this->_contactTable) {
+		if (! $this->_contactTable)
+		{
 			$this->_contactTable = $this->getServiceLocator ()->get ( 'Communicate\Model\ContactTable' );
 		}
 		return $this->_contactTable;
 	}
+	
+	// returns the object of FeedbackTable model class
 	public function getFeedbackTable()
 	{
-		if (! $this->_feedbackTable) {
+		if (! $this->_feedbackTable)
+		{
 			$this->_feedbackTable = $this->getServiceLocator ()->get ( 'Communicate\Model\FeedbackTable' );
 		}
 		return $this->_feedbackTable;
 	}
 	
+	// contactus View form
 	public function contactusAction()
 	{
 		$contactUsForm = $this->getServiceLocator()->get('contact_us_form'); // create an instance of contact form
-		return new ViewModel(array('contactUs' => $contactUsForm));
+
+		$flashMessages = $this->flashMessenger()->getCurrentMessages();
+		$this->flashMessenger()->clearCurrentMessages();
+		$this->flashMessenger()->clearMessages();
+		
+		return new ViewModel(array('contactUs' => $contactUsForm,
+									'flashMessage' => $flashMessages,
+							));
 	}
 	
-	public function savecontactAction()
+	// used to insert the enquiry into the database table contact and returns the message
+	public function saveContactUsAction()
 	{
-		$contactForm = $this->getServiceLocator()->get('contact_us_form');
+		$contactUsForm = $this->getServiceLocator()->get('contact_us_form');
 		$request = $this->getRequest ();
 		$response = $this->getResponse ();
-		if ($request->isPost ()) {
+		if ($request->isPost ())
+		{
 			$contactUs = new Contact();
-			$contactForm->setInputFilter($contactUs->getInputFilter());
-			$contactForm->setData ( $request->getPost () );
-			if ($contactForm->isValid ()) 
+			$contactUsForm->setInputFilter($contactUs->getInputFilter());
+			$contactUsForm->setData ( $request->getPost () );
+		
+			if ($contactUsForm->isValid ())
 			{
-				$contactUs->exchangeArray ( $contactForm->getData () );
-				if($this->getContactTable()->savecontact($contactUs))
+				$contactUs->exchangeArray ( $contactUsForm->getData () );
+				if($this->getContactTable()->saveContact($contactUs))
 				{
-					$response->setContent ( \Zend\Json\Json::encode ( array (
-							'response' => true,
-							'message' => 'Your Enquiry has been send to us. We will get back to you soon.'
-					) ) );
-					return $response;
-					
-// 					$message = "Your Enquiry has been send to us. We will get back to you soon.";
-// 					$this->flashmessenger()->addMessage($message);
-// 					return $this->redirect()->toRoute('communicate' , array('action' => 'contactus'));
-					
+					$message = "Thanks for showing interest. We will get back to you soon.";
+					$this->flashMessenger()->addMessage($message);
 				}
-				else 
+				else
 				{
-					$response->setContent ( \Zend\Json\Json::encode ( array (
-							'response' => false,
-							'message' => 'There is some problem occured. Please try Again'
-					) ) );
-					return $response;
-					
-// 					$message = "There is some problem occured";
-// 					die("hel not done");
-					
+					$message = "There is some problem occured";
+					$this->flashMessenger()->addMessage($message);
 				}
 			}
 			else
 			{
-				$response->setContent ( \Zend\Json\Json::encode ( array (
-						'response' => false,
-						'message' => 'Please Fill Valid Data in fields'
-				) ) );
-				return $response;
-				
-// 				$message = "Please Fill Valid Data in fields";
-// 				$this->redirect()->toRoute('communicate',array('action' => 'contactus'));
-				
+				$message = "Please Fill Valid Data in fields";
+				$this->flashMessenger()->addMessage($message);
 			}
-				
+		
 		}
-		else
-		{
-			return $this->redirect()->toRoute('Communicate',array('action' => 'contactus'));
-		}	
+		
+		return $this->redirect()->toRoute('communicate',array('action' => 'contactus'));
 	}
 	
-	// Feedback work
-	
+	// Feedback view form
 	public function feedbackAction()
 	{
 		$feedbackForm = $this->getServiceLocator()->get('feedback_form'); // create an instance of contact form
-		return new ViewModel(array('feedback' => $feedbackForm));
+		
+		$flashMessages = $this->flashMessenger()->getCurrentMessages();
+		$this->flashMessenger()->clearCurrentMessages();
+		$this->flashMessenger()->clearMessages();
+		
+		return new ViewModel(array('feedback' => $feedbackForm,
+									'flashMessage' => $flashMessages,
+						));
 	}
 	
-	public function savefeedbackAction()
+	// used to insert the feedback into the database table feedback and returns the message
+	public function saveFeedbackAction()
 	{
-		$feedbackForm = $this->getServiceLocator()->get('feedback_form');
+		$feedbackForm = $this->getServiceLocator()->get('feedback_form'); // create an instance of contact form
 		$request = $this->getRequest ();
 		$response = $this->getResponse ();
+		
 		if ($request->isPost ()) {
 			$feedback = new Feedback();
 			$feedbackForm->setInputFilter($feedback->getInputFilter());
@@ -110,48 +116,23 @@ class CommunicateController extends AbstractActionController
 				$feedback->exchangeArray ( $feedbackForm->getData () );
 				if($this->getFeedbackTable()->saveFeedback($feedback))
 				{
-					$response->setContent ( \Zend\Json\Json::encode ( array (
-							'response' => true,
-							'message' => 'Your Enquiry has been send to us. We will get back to you soon.'
-					) ) );
-					return $response;
-						
-					// 					$message = "Your Enquiry has been send to us. We will get back to you soon.";
-					// 					$this->flashmessenger()->addMessage($message);
-					// 					return $this->redirect()->toRoute('communicate' , array('action' => 'contactus'));
-						
+					$message = "Thanks for your feedback. We will get back to you soon.";
+					$this->flashMessenger()->addMessage($message);
 				}
 				else
 				{
-					$response->setContent ( \Zend\Json\Json::encode ( array (
-							'response' => false,
-							'message' => 'There is some problem occured. Please try Again'
-					) ) );
-					return $response;
-						
-					// 					$message = "There is some problem occured";
-					// 					die("hel not done");
-						
+					$message = "There is some problem occured";
+					$this->flashMessenger()->addMessage($message);
 				}
 			}
 			else
 			{
-				$response->setContent ( \Zend\Json\Json::encode ( array (
-						'response' => false,
-						'message' => 'Please Fill Valid Data in fields'
-				) ) );
-				return $response;
-		
-				// 				$message = "Please Fill Valid Data in fields";
-				// 				$this->redirect()->toRoute('communicate',array('action' => 'contactus'));
-		
+				$message = "Please Fill Valid Data in fields";
+				$this->flashMessenger()->addMessage($message);
 			}
 		
 		}
-		else
-		{
-			return $this->redirect()->toRoute('communicate',array('action' => 'feedback'));
-		}
 		
+		return $this->redirect()->toRoute('communicate',array('action' => 'feedback'));
 	}
 }

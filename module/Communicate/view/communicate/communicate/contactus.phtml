@@ -18,15 +18,32 @@
         <div class="bodyContent">
 		<div class="bodyContent">
           <div class="body_text">
-            <div class="green_highlight" style = "display:none;" id = "msgDiv"></div>
-                        <div class="clear"></div>
+          <?php
+            if(isset($flashMessage) && !empty($flashMessage))
+            {
+            ?>
+            <div class="green_highlight" id = "msgDiv">
+            <?php 
+            	foreach($flashMessage as $val)
+            	{
+            ?>
+            	<p><?php echo $val?></p>
+            <?php 
+            	}
+            	//$flashMessage = NULL;
+            ?>
+            </div>
+            <?php 
+            }
+          ?>
+            <div class="clear"></div>
             <p><strong>Kindly fill up the Contact form below.</strong></p>
             <p>
             </p><div class="bodyContent">
             
             <?php
 				$form = $this->contactUs;
-				$form->setAttribute ( 'action', $this->url( 'communicate', array ('action' => 'savecontact')));
+				$form->setAttribute ( 'action', $this->url( 'communicate', array ('action' => 'saveContactUs')));
 				$form->setAttribute ( 'method', 'post' );
 				$form->setAttribute ( 'id', 'frm');
 				$form->setAttribute ( 'name', 'frm');
@@ -37,48 +54,66 @@
 			?>
 			<div>
                   <!--Fieldset Section Starts Here-->
-                  <fieldset class="bdr">
-		        <dl>
-                    <dt><?php
-					$name = $form->get ( 'txt_name' );
-					echo $this->formLabel ( $name );
-					?></dt>
-                    <dd>
-		            <?php echo $this->formText($name) . $this->formElementErrors($name); ?>
-		            <div id="txt_name_error" class="red"></div>
-		            </dd>
-                </dl>
-				<dl>
-                    <dt><?php
-					$email = $form->get ( 'txt_email' );
-					echo $this->formLabel ( $email );
-					?></dt>
-                    <dd><?php echo $this->formtext($email) . $this->formElementErrors($email); ?>
-					<div id="txt_email_error" class="red"></div>
-					</dd>
-                  </dl>
-				<dl>
-                    <dt><?php
-					$phone = $form->get ( 'txt_phone' );
-					echo $this->formLabel ( $phone );
-					?></dt>
-                    <dd id="db_width">
-                    <div class="lblField">
-                    <?php echo $this->formtext($phone) . $this->formElementErrors($phone); ?>
-					<div id="txt_phone_error" class="red"></div>
-					</div>
-					</dd>
-                  </dl>
-                  <dl>
-                    <dt><?php
-					$enquiry = $form->get ( 'txt_enquiry' );
-					echo $this->formLabel ( $enquiry );
-					?></dt>
-                    <dd><?php echo $this->formtextarea($enquiry) . $this->formElementErrors($enquiry); ?>
-					<div id="txt_enquiry_error" class="red"></div>
-					</dd>
-                  </dl>
-				</fieldset>
+                 <fieldset class="bdr">
+			        <dl>
+	                    <dt><?php
+							$name = $form->get ( 'txt_name' );
+							echo $this->formLabel()->openTag($name) . $name->getLabel();
+							?>
+							<span class="red">*</span>
+							<?php $this->formLabel()->closeTag();
+							?>
+						</dt>
+	                    <dd>
+			            	<?php echo $this->formText($name) ?>
+			            <div id="txt_name_error" class="red"></div>
+			            </dd>
+	                </dl>
+					<dl>
+	                    <dt><?php
+							$email = $form->get ( 'txt_email' );
+							echo $this->formLabel()->openTag($email) . $email->getLabel();
+							?>
+							<span class="red">*</span>
+							<?php $this->formLabel()->closeTag();
+							?>		
+						</dt>
+	                   	<dd>
+	                   		<?php echo $this->formtext($email)?>
+						<div id="txt_email_error" class="red"></div>
+						</dd>
+	                  </dl>
+					<dl>
+	                    <dt><?php
+							$phone = $form->get ( 'txt_phone' );
+							echo $this->formLabel()->openTag($phone) . $phone->getLabel();
+							?>
+							<span class="red">*</span>
+							<?php $this->formLabel()->closeTag();
+							?>
+						</dt>
+	                    <dd id="db_width">
+	                    <div class="lblField">
+	                    	<?php echo $this->formtext($phone)?>
+						<div id="txt_phone_error" class="red"></div>
+						</div>
+						</dd>
+	                  </dl>
+	                  <dl>
+	                    <dt><?php
+							$enquiry = $form->get ( 'txt_enquiry' );
+							echo $this->formLabel()->openTag($enquiry) . $enquiry->getLabel();
+							?>
+							<span class="red">*</span>
+							<?php $this->formLabel()->closeTag();
+							?>
+						</dt>
+	                    <dd>
+	                    	<?php echo $this->formtextarea($enquiry); ?>
+						<div id="txt_enquiry_error" class="red"></div>
+						</dd>
+	                  </dl>
+					</fieldset>
 				 <!--Fieldset Section Ends Here-->
                  <!--Button Section Starts Here-->
                 <div class="pixbr XY20">
@@ -94,7 +129,7 @@
                             </div>
 							</td>
 							<td align="center"><div class="lblButton">
-							<?php //echo $this->formbutton($form->get('cancel')); ?>
+							<?php echo $this->formReset($form->get('cancel')); ?>
 							</div>
                                 <div class="lblButtonRight">
                                   <div class="btnRtCorner"></div>
@@ -125,62 +160,50 @@
   </div>
 </div>
 <script>
-$('#frm').submit(function(){
-
-	$.ajax({
-		url:'<?php echo $this->url('communicate',array('action' => 'savecontact'))?>',
-		type: "post",
-		data: $('#frm').serialize(),
-		success: function( data ){
-			returnData = jQuery.parseJSON(data);
-			if(returnData.response == true)
-			{
-				// if user successfully entered into database
-				$('#msgDiv').html('');
-				$('#msgDiv').show();
-				$('#msgDiv').append(returnData.message);
-				$(".flushMe").val('');
-			}
-			else
-			{
-				// any problem occured during insertion
-				$('#msgDiv').html('');
-				$('#msgDiv').show();
-				$('#msgDiv').append(returnData.message);
-			}
-		},
-	});
-return false;
-});
-/*
-
-function formValidate(){
+$('#frm').submit(function()
+{
 	var errFlag = false;
-	   if(trim($('#txt_name').val()) == ''){
+	if(trim($('#txt_name').val()) == '')
+	{
 	       $('#txt_name_error').html('Please enter your name.');
 	       $('#txt_name').focus();
 	       errFlag = true;
-	   }
-	   if(trim($('#txt_email').val()) == ''){
+	}
+	
+	if(trim($('#txt_email').val()) == '')
+	{
 	       $('#txt_email_error').html('Please enter your email address.');
 	       errFlag = true;
-	   }
-	   else if(validateEmail($('#txt_email').val()) != 0){
+	}
+	else if(validateEmail($('#txt_email').val()) != 0)
+	{
 	      $('#txt_email_error').html("Please enter valid email address.");
 	      errFlag = true;
-	   }   
-	   if(trim($('#txt_phone').val()) == ''){
+	}
+	   
+	if(trim($('#txt_phone').val()) == '')
+	{
 	       $('#txt_phone_error').html('Please enter your phone.');
 	       errFlag = true;
-	   }
-	   if(trim($('#txt_enquiry').val()) == ''){
-	       $('#txt_enquiry_error').html('Please enter your enquiry.');
-	       errFlag = true;
-	   }
+	}
+	
+	if(trim($('#txt_enquiry').val()) == '')
+	{
+		$('#txt_enquiry_error').html('Please enter your enquiry.');
+	    errFlag = true;
+	}
+	
+	if(errFlag)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}  
+});
 
-	   if(errFlag){
-	       return false;
-	   }
-
-} */
+$(document).ready(function(){
+	$(".flushMe").val('');
+});
 </script><div class="clear"></div>

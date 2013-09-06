@@ -7,7 +7,6 @@ class FeedbackForm extends Form
 {
     public function __construct($name = null)
     {
-        // we want to ignore the name passed
         parent::__construct('feedback');
         $this->setAttribute('method', 'post');
         
@@ -16,11 +15,10 @@ class FeedbackForm extends Form
             'attributes' => array(
                 'type'  => 'text',
             	'id' => 'txt_name',
-            	'required' => 'required',
-            		'class' => 'flushMe',
+            	'class' => 'flushMe',
             ),
             'options' => array(
-                'label' => 'Name',
+                'label' => 'Name:',
             ),
         ));
         
@@ -29,11 +27,10 @@ class FeedbackForm extends Form
             'attributes' => array(
                 'type'  => 'text',
             	'id' => 'txt_email',
-            	'required' => 'required',
-            		'class' => 'flushMe',
+            	'class' => 'flushMe',
             ),
             'options' => array(
-                'label' => 'Email',
+                'label' => 'Email:',
             ),
         ));
         
@@ -42,11 +39,10 @@ class FeedbackForm extends Form
             'attributes' => array(
                 'type'  => 'text',
             	'id' => 'txt_phone',
-            	'required' => 'required',
-            		'class' => 'flushMe',
+            	'class' => 'flushMe',
             ),
             'options' => array(
-                'label' => 'Phone',
+                'label' => 'Phone:',
             ),
         ));
          
@@ -55,11 +51,10 @@ class FeedbackForm extends Form
          		'attributes' => array(
          			'type'  => 'textarea',
          			'id' => 'txt_enquiry',
-         			'required' => 'required',
-         				'class' => 'flushMe',
+         			'class' => 'flushMe',
          		),
          		'options' => array(
-         			'label' => 'Enquiry',
+         			'label' => 'Enquiry:',
          		),
          ));
          

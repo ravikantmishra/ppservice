@@ -1,4 +1,10 @@
 <?php 
+/*
+ * Organization: OSSCube
+* Added: Sanchit Puri
+* Scope: Contact Model class used to set the form fields and validate the fields data
+* Dated: 05-09-2013
+*/
 namespace Communicate\Model;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
@@ -12,6 +18,7 @@ class Contact
     public $phone;
     public $enquiry;
 
+    // used to set the data coming from form
 	public function exchangeArray($data)
     {
         $this->name = (isset($data['txt_name'])) ? $data['txt_name'] : null;
@@ -20,19 +27,13 @@ class Contact
         $this->enquiry  = (isset($data['txt_enquiry'])) ? $data['txt_enquiry'] : null;
     }
     
-    public function getArrayCopy()
-    {
-        return get_object_vars($this);
-    }
-    
     
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
     
-   
-
+    // returns the validation on the fields
     public function getInputFilter()
     {
         if (!$this->inputFilter) {
@@ -55,6 +56,12 @@ class Contact
                             'max'      => 100,
                         ),
                     ),
+                	array(
+                		'name' => 'Regex',
+                		'options' => array(
+                		'pattern' => '/^[a-zA-Z]+((\s|\-)[a-zA-Z]+)?$/',
+                		),
+                	),
                 ),
             )));
 
