@@ -26,7 +26,7 @@ return array(
     ),
     'view_manager' => array(
         'template_path_stack' => array(
-            'admin' => __DIR__ . '/../view',
+            'info' => __DIR__ . '/../view',
         ),
     ),
 );

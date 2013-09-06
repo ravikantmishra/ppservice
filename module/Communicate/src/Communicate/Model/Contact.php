@@ -1,5 +1,5 @@
 <?php 
-namespace Contact\Model;
+namespace Communicate\Model;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
@@ -7,18 +7,17 @@ use Zend\InputFilter\InputFilterInterface;
 
 class Contact
 {
-    public $id;
     public $name;
-    public $description;
-    public $status;
-    
+    public $email;
+    public $phone;
+    public $enquiry;
 
-    public function exchangeArray($data)
+	public function exchangeArray($data)
     {
-        $this->id     = (isset($data['id'])) ? $data['id'] : null;
-        $this->name = (isset($data['name'])) ? $data['name'] : null;
-        $this->description  = (isset($data['description'])) ? $data['description'] : null;
-        $this->status  = (isset($data['status'])) ? $data['status'] : null;
+        $this->name = (isset($data['txt_name'])) ? $data['txt_name'] : null;
+        $this->email = (isset($data['txt_email'])) ? $data['txt_email'] : null;
+        $this->phone  = (isset($data['txt_phone'])) ? $data['txt_phone'] : null;
+        $this->enquiry  = (isset($data['txt_enquiry'])) ? $data['txt_enquiry'] : null;
     }
     
     public function getArrayCopy()
@@ -41,15 +40,7 @@ class Contact
             $factory     = new InputFactory();
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'id',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'Int'),
-                ),
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'name',
+                'name'     => 'txt_name',
                 'required' => true,
                 'filters'  => array(
                     array('name' => 'StripTags'),
@@ -68,7 +59,7 @@ class Contact
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'description',
+                'name'     => 'txt_email',
                 'required' => true,
                 'filters'  => array(
                     array('name' => 'StripTags'),
@@ -76,19 +67,44 @@ class Contact
                 ),
                 'validators' => array(
                     array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 100,
+                    		'name' => 'EmailAddress',
+                        	'options' => array(
+	                            'encoding' => 'UTF-8',
+	                            'min'      => 5,
+	                            'max'      => 100,
                         ),
                     ),
                 ),
             )));
             
+            $inputFilter->add($factory->createInput(array(
+            		'name'     => 'txt_phone',
+            		'required' => true,
+            		'filters'  => array(
+            				array('name' => 'StripTags'),
+            				array('name' => 'StringTrim'),
+            		),
+            		'validators' => array(
+            				array(
+			                    'name' => 'Regex',
+			                    'options' => array(
+			                    'pattern' => '/^[0-9]+$/',
+                       			),
+                    		),
+            				array(
+            						'name'    => 'StringLength',
+            						'options' => array(
+            								'encoding' => 'UTF-8',
+            								'min'      => 10,
+            								'max'      => 12,
+            						),
+            				),
+                	),
+            )));
+            
             
             $inputFilter->add($factory->createInput(array(
-            		'name'     => 'status',
+            		'name'     => 'txt_enquiry',
             		'required' => true,
             		'filters'  => array(
             				array('name' => 'StripTags'),
@@ -99,8 +115,8 @@ class Contact
             						'name'    => 'StringLength',
             						'options' => array(
             								'encoding' => 'UTF-8',
-            								'min'      => 1,
-            								'max'      => 100,
+            								'min'      => 5,
+            								'max'      => 500,
             						),
             				),
             		),

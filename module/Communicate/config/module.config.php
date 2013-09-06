@@ -1,24 +1,23 @@
 <?php 
-
 return array(
     'controllers' => array(
         'invokables' => array(
-            'Apply\Controller\Apply' => 'Apply\Controller\ApplyController',
+            'Communicate\Controller\Communicate' => 'Communicate\Controller\CommunicateController',
         ),
     ),
     'router' => array(
         'routes' => array(
-            'apply' => array(
+            'communicate' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/apply[/:action][/:id]',
+                    'route'    => '/communicate[/:action[/:id]]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Apply\Controller\Apply',
-                        'action'     => 'index',
+                        'controller' => 'Communicate\Controller\Communicate',
+                        'action'     => 'contactus',
                     ),
                 ),
             ),
@@ -26,12 +25,7 @@ return array(
     ),
     'view_manager' => array(
         'template_path_stack' => array(
-            'admin' => __DIR__ . '/../view',
+            'communicate' => __DIR__ . '/../view',
         ),
     ),
 );
-
-
-
-
-

@@ -1,7 +1,7 @@
 <?php 
 
 // module/Album/src/Album/Form/AlbumForm.php:
-namespace contact\Form;
+namespace Contact\Form;
 
 use Zend\Form\Form;
 

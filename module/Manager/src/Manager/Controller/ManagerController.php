@@ -11,6 +11,7 @@ use Zend\View\Model\ViewModel;
 use Manager\Model\Manager;    
 use Manager\Model\ManagerTable;
 use Manager\Form\ManagerForm; 
+use Manager\Form\AdminForm;
 use Zend\Session\Config\StandardConfig;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
@@ -145,6 +146,9 @@ class ManagerController extends AbstractActionController
                 	
                 	$message="Your username and password Incorrect";
                 	$this->flashmessenger()->addMessage($message);
+                	 	$this->flashmessenger()->addMessage ( array (
+                			'flashMessages' => 'Record inserted  successfully'
+                	) );
                 	$this->flashmessenger()->getMessages();
            			
 				 }
@@ -169,6 +173,11 @@ class ManagerController extends AbstractActionController
     	
     	$container = new Container('namespace');
         $container->adminsession;
+        $manager = new Manager();
+        $form = new AdminForm();
+        $form->setInputFilter($manager->getInputFilter());
+       
+       	return array('form' => $form);
     }
     
     

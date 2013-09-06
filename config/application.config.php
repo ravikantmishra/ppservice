@@ -10,6 +10,7 @@ return array(
         'Application',
         'Manager',
         'Info',
+        'Communicate',
         'User'
         ),
     'module_listener_options' => array(
