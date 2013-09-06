@@ -3,6 +3,7 @@ namespace Manager;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Authentication\AuthenticationService;
+use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
 
 class Module implements AutoloaderProviderInterface
@@ -58,6 +59,14 @@ class Module implements AutoloaderProviderInterface
 		'Manager\Model\MyAuthStorage' => function($sm){
 		    return new \Manager\Model\MyAuthStorage('passportservices');  
 		},
+		
+		'admin_user_form' => function ($sm) {
+			$form = new Form\AdminForm();
+			$form->setHydrator(new ClassMethods());
+			return $form;
+		},
+		
+		
 		
 		'AuthService' => function($sm) {
 		    $dbAdapter      = $sm->get('Zend\Db\Adapter\Adapter');

@@ -1,8 +1,5 @@
 <?php 
-
-
-
-namespace manager\Form;
+namespace Manager\Form;
 use Zend\Form\Form;
 class ManagerForm extends Form
 {
