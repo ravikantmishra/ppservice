@@ -31,12 +31,10 @@ class UserTable {
 		);
 		
 		$this->tableGateway->insert ( $data );
-		$lastId = $this->adapter->getDriver()->getLastGeneratedValue();
+		$lastId =  $this->tableGateway->lastInsertValue;
 		 
 		$user_session = new Container('user');
-		$user_session->frontidsession = $lastId;
-		
-		die($lastId);
+		$user_session->frontidsession = $lastId;		
 	}
 	
 	public function getRegisterUserName($formValue) {
