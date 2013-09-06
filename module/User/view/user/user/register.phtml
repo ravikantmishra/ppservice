@@ -1,0 +1,131 @@
+<!-- 
+ * Organization: OSSCube
+* Added: Ramandeep Singh
+* Scope: register page
+* Dated: 05-09-2013
+*/
+ -->
+<div class="clear">&nbsp;</div>
+<div class="wrapper">
+  <div class="container_main">
+    <div class="new_container">
+      <!--Heading Container Section Starts Here-->
+      <div class="heading_container">
+        <div class="heading_container_left"></div>
+        <div class="heading_containerbg">
+          <div class="page_heading">Register</div>
+        </div>
+        <div class="heading_container_right"></div>
+      </div>
+      <!--Heading Container Section Ends Here-->
+      <!--Form Inner/Inside Section Starts Here-->
+      <div class="form_inside_section">
+
+        <div class="bodyContent">
+          
+					<?php
+					$form = $this->registerForm;
+					$form->setAttribute('action', $this->url('register') );
+					$form->setAttribute('onsubmit', 'return fncSubmit()');
+					$form->prepare();
+					
+					echo $this->form()->openTag($form);
+					//$this->view->headScript()->appendFile('/path/to/js/file.js');
+					?>
+					
+  <table cellpadding="0" cellspacing="5" border="0" width="50%" align="center" class="login_form">
+    <tbody><tr>
+<th><label for="sf_guard_user_first_name"><?php echo $this->formLabel($form->get('first_name')); ?></label></th>
+<td><?php echo $this->formInput($form->get('first_name')); ?></td>
+</tr>
+<tr>
+<th><label for="sf_guard_user_last_name"><?php echo $this->formLabel($form->get('last_name')); ?></label></th>
+<td><?php echo $this->formInput($form->get('last_name')); ?></td>
+</tr>
+<tr>
+<th><label for="sf_guard_user_email_address"><?php echo $this->formLabel($form->get('email')); ?> <span class="red">*</span></label></th>
+<td>
+<ul class="error_list">
+<li id="emailMgs"></li>
+</ul>
+<?php echo $this->formInput($form->get('email')); ?></td>
+</tr>
+<tr>
+<th><label for="sf_guard_user_username"><?php echo $this->formLabel($form->get('user_name')); ?> <span class="red">*</span></label></th>
+<td><?php echo $this->formInput($form->get('user_name')); ?></td>
+</tr>
+<tr>
+<th><label for="sf_guard_user_password"><?php echo $this->formLabel($form->get('password')); ?> <span class="red">*</span></label></th>
+<td><?php echo $this->formInput($form->get('password')); ?></td>
+</tr>
+<tr>
+<th><label for="sf_guard_user_password_again"><?php echo $this->formLabel($form->get('confirm_password')); ?><span class="red">*</span></label></th>
+<td>
+<ul class="error_list">
+<li id="passwordMgs"></li>
+</ul>
+<?php echo $this->formInput($form->get('confirm_password')); ?></td>
+</tr>
+    </tbody><tfoot>
+      <tr>
+	  <td>&nbsp;</td>
+        <td>
+		
+          <?php echo $this->formSubmit($form->get('submit')); ?>
+		  <?php echo $this->formSubmit($form->get('back')); ?>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+<?php 
+echo $this->form()->closeTag();
+
+?>
+ </div>
+      </div>
+      <!--Form Inner/Inside Section Ends Here-->
+    </div>
+    <div class="container_bottombg"></div>
+  </div>
+</div>
+<script>
+
+function checkEmail(email){
+    var email = $('#email').val();
+    
+    var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+    if (reg.test(email)){
+    	$('#emailMgs').html(" ");
+    return true; 
+   }
+    else{
+    	$('#emailMgs').html("Please provide a valid email");    	
+		$('#email').val('');
+    return false;
+    } 
+
+}
+
+function checkPassword(){
+	$('#passwordMgs').fadeIn();
+	if( $('#password').val() != $('#confirm_password').val() ) {
+
+			$('#passwordMgs').html("Password doesn't match");
+	    	
+	    	return false;
+			
+		}else {
+			$('#passwordMgs').html(" ");
+			return true;
+		}
+}
+
+function fncSubmit(){
+	if( $('#password').val() != $('#confirm_password').val() ) {
+		$('#confirm_password').val('');
+		$('#passwordMgs').html("Password doesn't match");
+		return false;
+	}
+}
+
+</script>
