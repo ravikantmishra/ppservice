@@ -256,7 +256,10 @@ width:85%;
 margin-top:1px;
 	
 }
-
-
+.tablerow{
+	background-color:#5F9EA0;
+	color:#FFF;
+	cell-spacing:0px; 
+}
 
 

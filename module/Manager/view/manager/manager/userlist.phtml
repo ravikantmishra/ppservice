@@ -1,0 +1,105 @@
+<script>
+
+function ConfirmDelete()
+{
+  var x = confirm("Are you sure you want to delete?");
+  if (x)
+      return true;
+  else
+    return false;
+}
+
+function ActiveData(id,status)
+{
+	var dataString = 'id='+ id+'status='+status;
+	//alert(dataString);
+	var dataString = 'id='+ id;
+	$.ajax({type:"POST", url: "<?php echo $this->url('manager',array('action'=>'activeuserlist')); ?>",
+	data:dataString, success: function(response) {
+	var txt=response;
+	alert(txt);
+	document.getElementById("act").innerHTML=txt;
+	}});
+}
+
+</script>
+<?php
+$title = 'Admin user list';
+$this->headTitle($title);
+$form = $this->form;
+$form->setAttribute('action', $this->url('manager', array('action' => 'adduser')));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+?>
+<table align="center" width="85%"  class="adminadduser"> 
+	<tr>
+		<td>
+		<?php 
+			if(isset($flashMessage) && !empty($flashMessage)) 
+			{
+			?>
+		    	<?php 
+		    	foreach ($flashMessage as $msg)
+		    	{
+		    	?>
+			  <div><?php echo $msg; ?></div>
+		    	<?php  
+		    	}
+		    	?>
+			<?php 
+			}
+			?>
+		</td>
+	</tr>
+	<tr class="tablerow">
+		<td>
+			First Name
+		</td>
+		<td>
+			Last Name
+		</td>
+		<td>
+			Email
+		</td>
+		<td>
+			UserName
+		</td>
+	
+		<td>
+			Status
+		</td>
+	
+		<td>
+			Action
+		</td>
+	</tr>
+	<?php foreach($this->userlist as $row) : ?>
+    <tr>
+       <td><?php echo $row->firstname;?></td>
+       <td><?php echo $row->lastname;?></td>
+       <td><?php echo $row->email;?></td>
+       <td><?php echo $row->username;?></td>
+       <td>
+       	<a href="<?php echo $this->url('manager',array('action'=>'activeuserlist', 'id' => $row->id,'status'=>$row->status));?>"><?php if($row->status==1) {?><div id='act'>Active</div><?php } else{ echo "Inactive"; }?> </a>
+       
+       </td>
+       <td>
+       <a href="<?php echo $this->url('manager',array('action'=>'admindelete', 'id' => $row->id));?>" Onclick="return ConfirmDelete();">Delete</a>
+       </td>
+    </tr>
+    <?php endforeach; ?>
+	
+</table>
+
+
+
+<?php 
+
+echo $this->form()->closeTag();
+?>
+
+
+
+
+

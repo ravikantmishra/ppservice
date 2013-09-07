@@ -35,6 +35,16 @@ class ManagerForm extends Form
             ),
         ));
         
+        $this->add(array(
+        		'name' => 'cancel',
+        		'type' => 'Zend\Form\Element\Button',
+        		'attributes' => array(
+        				'value' => 'Cancel',
+        				'class'=>'btnArea',
+        				'onclick'=>"window.location='/'"
+        		)
+        ));
+        
         
         $this->add(array(
             'name' => 'submit',

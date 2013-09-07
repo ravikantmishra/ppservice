@@ -8,13 +8,16 @@ if($data)
 ?>
 <table width="100%" style="border-color:#6495ED;border-style:solid; border-width:1px;  height:505px;">
 <tr>
-<td>
-<a href="<?php echo $this->url('manager',array('action'=>'adduser')) ?>">Add User</a>
+<td>Admin Management
+<p><a href="<?php echo $this->url('manager',array('action'=>'adduser')) ?>">Add User</a></p>
+<p><a href="<?php echo $this->url('manager',array('action'=>'userlist')) ?>">Admin User List</a></p>
 </td>
 </tr>
 		<tr>
 		<td class="active">
 		<a href="<?php echo $this->url('manager',array('action'=>'adminuser')) ?>">Admin management</a>
+		
+		
 		</td>
 		</tr>
 		<tr>

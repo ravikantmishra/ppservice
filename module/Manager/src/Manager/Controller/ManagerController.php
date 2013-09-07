@@ -10,17 +10,21 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Manager\Model\Manager;    
 use Manager\Model\ManagerTable;
+use Manager\Model\AdminTable;
 use Manager\Form\ManagerForm; 
 use Manager\Form\AdminForm;
 use Zend\Session\Config\StandardConfig;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
+use Manager\Model\Entity\AdminEntity;
 class ManagerController extends AbstractActionController
 {
 	protected $managerTable;
+	protected $adminTable;
 	protected $form;
 	protected $storage;
 	protected $authservice;
+	public $viewmodel;
 
 	public function getAuthService()
     {
@@ -45,12 +49,21 @@ class ManagerController extends AbstractActionController
         
         return $this->managerTable;
     }
-
+    
+    
+    public function getAdminTable()
+    {
+    	if (!$this->adminTable) {
+    		$this->adminTable = $this->getServiceLocator ()->get ( 'AdminTable' );
+    	}
+    
+    	return $this->adminTable;
+    }
     /*
      *  Function use for getting the object of manager table class
     */
    
-	   public function getSessionStorage()
+	public function getSessionStorage()
     {
         if (! $this->storage) {
             $this->storage = $this->getServiceLocator()
@@ -125,7 +138,8 @@ class ManagerController extends AbstractActionController
                            ->setCredential($request->getPost('password'));
              $result = $this->getAuthService()->authenticate();
              $resultnew= $authAdapter->getResultRowObject();
-                if ($result->isValid()) {
+                if ($result->isValid()) 
+                {
 					if ($this->getAuthService()->hasIdentity())
 					{
 					  $adminsession=$resultnew->id;
@@ -139,46 +153,122 @@ class ManagerController extends AbstractActionController
 					}
 					$this->getAuthService()->setStorage($this->getSessionStorage());
                     $this->getAuthService()->getStorage()->write($request->getPost('username'));
-                   
                 }
                 else
                 {
-                	
                 	$message="Your username and password Incorrect";
-                	$this->flashmessenger()->addMessage($message);
-                	 	$this->flashmessenger()->addMessage ( array (
-                			'flashMessages' => 'Record inserted  successfully'
-                	) );
-                	$this->flashmessenger()->getMessages();
-           			
+                	$this->flashMessenger()->addMessage($message);
 				 }
-	
-				 return $this->redirect()->toRoute('manager', array('action' => 'index'));
+				 
               }
               
-              
-              
 			}
-	 			 return array('form' => $form);
+			$flashMessages = $this->flashMessenger()->getMessages();
+	 			 return array('form' => $form,
+	 			 				'flashMessage' => $flashMessages,
+	 			 			);
   		}
-
 
   	/*
   	 * Function use for add user Action
   	 */
   		
+
+  		
   		
     public function adduserAction()
     {
-    	
     	$container = new Container('namespace');
         $container->adminsession;
         $manager = new Manager();
         $form = new AdminForm();
+        $form->get('status')->setValue('1');
         $form->setInputFilter($manager->getInputFilter());
+        $request = $this->getRequest();
+        if ($request->isPost()) 
+        {
+        	$userObj = new AdminEntity();
+        	$form->setInputFilter($userObj->getInputFilter());
+        	$form->setData($request->getPost());
+        	if ($form->isValid()) {
+        		$userObj->exchangeArray($form->getData());
+        		$this->getAdminTable()->saveUser($userObj);
+        		$message="Admin user added successfully";
+        		$this->flashmessenger()->addMessage($message);
+        		
+        	}
+        	
+        	return $this->redirect()->toRoute('manager', array('action' => 'userlist'));
+        }
+
        
        	return array('form' => $form);
     }
+    
+    /*
+     * Function use for  admin user listing
+    */
+    
+    
+    public function userlistAction()
+    {
+    	$container = new Container('namespace');
+    	$container->adminsession;
+    	$manager = new Manager();
+    	$form = new AdminForm();
+    	$form->setInputFilter($manager->getInputFilter());
+    	$flashMessages = $this->flashMessenger()->getMessages();
+    	return new ViewModel(array(
+    			'userlist' => $this->getAdminTable()->fetchAll(),'form' => $form,'flashMessage' => $flashMessages,
+    	));
+	
+    }
+    
+    
+    /*
+     * Function use for  admin user delete data
+    */
+    
+    
+    Public function admindeleteAction()
+    {
+    	
+    	 $id = (int) $this->params()->fromRoute('id', 0);
+    	
+    	if (!$id) {
+    		return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
+    	}
+    	
+    	$request = $this->getRequest();
+    	$this->getAdminTable()->deleteAdmin($id);
+    	
+    	$message="Record deleted Successfully";
+    	
+    	$this->flashmessenger()->addMessage($message);
+    		
+    	return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
+    }
+    	
+
+    /*
+     * Function use for  active user data
+    */
+    
+    
+    function activeuserlistAction()
+    {
+    	
+    	$id = (int) $this->params()->fromRoute('id', 0);
+    	$status = (int) $this->params()->fromRoute('status', 0);
+    	$contact = $this->getAdminTable()->getAdmin($id);
+    	$this->getAdminTable()->updateAdmin(array('status'=>($contact->status) ? 0:1),array('id'=>$contact->id));
+    	return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
+		    	
+    }
+    
+    
+    
+    
     
     
     /*

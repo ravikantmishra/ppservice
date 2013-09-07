@@ -94,9 +94,11 @@ class AdminForm extends Form
 				'name' => 'status',
 				'options' => array(
 						'label' => 'Status',
+						'required'=>'required',
+// 						'setValue'=>'1',
 						'value_options' => array(
-								'0' => 'Inactive',
 								'1' => 'Active',
+								'0' => 'Inactive',
 						),
 				)
 		));

@@ -13,10 +13,11 @@ return array(
             'manager' => array(
                 'type'    => 'segment',
                 'options' => array(
-                    'route'    => '/manager[/:action][/:id]',
+                    'route'    => '/manager[/:action][/:id][/:status]',
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
+                    	'status'=>'[0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Manager\Controller\Manager',
@@ -33,6 +34,7 @@ return array(
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            		
                             ),
                             'defaults' => array(
                             ),

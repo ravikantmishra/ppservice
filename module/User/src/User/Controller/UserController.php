@@ -79,7 +79,7 @@ class UserController extends AbstractActionController {
 		return array('registerForm' => $form);
 	}
 	
-	// unset the session so that image get chaange in application module header layout 
+	// unset the session so that image get change in application module header layout 
 	public function logoutAction() {		
 		SESSION_START();
 		UNSET($_SESSION['user']);
