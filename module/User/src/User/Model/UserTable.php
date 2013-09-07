@@ -21,31 +21,30 @@ class UserTable {
 		$this->tableGateway = $tableGateway;
 	}
 
-	public function saveUser(RegisterEntity $userObj) {
-		$data = array (
-				'user_name' => $userObj->user_name,
-				'password' => md5(utf8_encode($userObj->password)),
-				'email' => $userObj->email,
-				'first_name' => $userObj->first_name,
-				'last_name' => $userObj->last_name
-		);
-		
+	public function saveUser($data) {	
 		$this->tableGateway->insert ( $data );
 		$lastId =  $this->tableGateway->lastInsertValue;
 		 
-		$user_session = new Container('user');
-		$user_session->frontidsession = $lastId;		
+		return $lastId;		
 	}
 	
-	public function getRegisterUserName($formValue) {
-		$row = $this->tableGateway->select ( array (
-				'user_name' => $formValue 
-		) )->current ();
+	public function setUserSession($key,$value) {
+		$userSession = new Container('user');
+		$userSession[$key] = $value;
+	}
+	
+	public function getUser($where) {
+		$row = $this->tableGateway->select ( $where )->current();
 		if (! $row) {
 			return false;
 		} else {
-			return true;
+			return $row;
 		}
+	}
+	
+	public function updateUser($value,$where) {
+		
+		$this->tableGateway->update( $value, $where );
 	}
 
 	public function validateUser(LoginEntity $login) {
@@ -61,8 +60,8 @@ class UserTable {
 		} else {
 			if (md5(utf8_encode($login->password)) == $row->password) {
 
-				$user_session = new Container('user');
-				$user_session->frontidsession = $row->id;
+				$userSession = new Container('user');
+				$userSession->frontidsession = $row->id;
 			
 				return true;
 			} else {

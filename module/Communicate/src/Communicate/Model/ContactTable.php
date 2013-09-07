@@ -1,4 +1,10 @@
 <?php 
+/*
+ * Organization: OSSCube
+* Added: Sanchit Puri
+* Scope: Contact Table class interact with the database table contact
+* Dated: 05-09-2013
+*/
 
 namespace Communicate\Model;
 use Zend\Db\Adapter\Adapter;
@@ -22,7 +28,8 @@ class ContactTable extends AbstractTableGateway
         $resultSet = $this->select();
         return $resultSet;
     }
-
+	
+    // used to insert the data coming from contactus form into the database table contact
     public function saveContact(Contact $contact)
     {
         $data = array(

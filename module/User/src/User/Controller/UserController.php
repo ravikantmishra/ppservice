@@ -13,6 +13,15 @@ use User\Model\Entity\LoginEntity;
 use User\Form\RegisterForm;
 use User\Model\Entity\RegisterEntity;
 use Zend\Session\Container;
+use User\Form\ForgetPasswordForm;
+use User\Model\Entity\ForgetPasswordEntity;
+use Zend\Mail\Transport\Smtp as SmtpTransport;
+use Zend\Mail\Transport\SmtpOptions;
+use Zend\Mail;
+use User\Form\ChangePasswordForm;
+use User\Model\Entity\ChangePasswordEntity;
+use Zend\Validator\NotEmpty;
+
 
 class UserController extends AbstractActionController {
 	
@@ -48,7 +57,7 @@ class UserController extends AbstractActionController {
 					return  $this->redirect()->toRoute('home');
 				}
 				else{
-// 					$this->redirect()->toRoute('login');					
+									
 				}
 			}
 		}
@@ -60,7 +69,6 @@ class UserController extends AbstractActionController {
 	public function registerAction() {
 		$form = new RegisterForm();
 		$form->get('submit')->setValue('Register');
-		$form->get('back')->setValue('Back');
 
 		$request = $this->getRequest();
 		if ($request->isPost()) {
@@ -71,8 +79,17 @@ class UserController extends AbstractActionController {
 
 			if ($form->isValid()) {
 				$userObj->exchangeArray($form->getData());
-				$this->getUserTable()->saveUser($userObj);
-				$this->redirect()->toRoute('home');
+				$data = array (
+						'user_name' => $userObj->user_name,
+						'password' => md5(utf8_encode($userObj->password)),
+						'email' => $userObj->email,
+						'first_name' => $userObj->first_name,
+						'last_name' => $userObj->last_name
+				);
+				
+				$lastId = $this->getUserTable()->saveUser($data);
+				$this->getUserTable()->setUserSession('frontidsession',$lastId);
+				return $this->redirect()->toRoute('home');
 			}
 		}
 		
@@ -83,6 +100,109 @@ class UserController extends AbstractActionController {
 	public function logoutAction() {		
 		SESSION_START();
 		UNSET($_SESSION['user']);
-		RETUrn $this->redirect()->toRoute('home');
+		return $this->redirect()->toRoute('home');
+	}
+	
+	public function forgetpasswordAction() {
+		$form = new ForgetPasswordForm();
+		$form->get('submit')->setValue('Request');
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$userObj = new ForgetPasswordEntity();
+			$form->setInputFilter($userObj->getInputFilter());
+		
+			$form->setData($request->getPost());
+		
+			if ($form->isValid()) {
+				$userObj->exchangeArray($form->getData());
+				$result = $this->getUserTable()->getUser(array('email' => $userObj->email));
+				
+				if(isset($result)) {
+					
+					$encryptLink = $result->id.'_'.$result->email.'_'.$result->user_name;
+					$result = (array)$result;
+					$result['link']=md5(utf8_decode($encryptLink));
+										
+					$this->mailConfiguration($result);					
+					$this->getUserTable()->updateUser(array('link' => $result['link']), array('user_name' => $result['user_name']));
+					//to do set mgs that mail has been send
+					return  $this->redirect()->toRoute('login');
+				}else {
+					die("invalid email");
+				}
+				
+			}
+		}
+		
+		return array('forgetPasswordForm' => $form);
+	}
+	
+	public function mailConfiguration($emailLinkArray)
+	{
+		
+		$mail = new Mail\Message();
+		$html = '<a href="http://www.ppservice.com/change?unique_key='.$emailLinkArray['link'].'" >Click to change password</a>';
+		$bodyPart = new \Zend\Mime\Message();
+		
+		$bodyMessage = new \Zend\Mime\Part($html);
+		$bodyMessage->type = 'text/html';
+		 $bodyPart->setParts(array($bodyMessage));
+
+    	$mail->setBody($bodyPart);
+		$mail->setFrom('ramandeep.singh@osscube.com', 'admin');
+		$mail->addTo($emailLinkArray['email']);
+		$mail->setSubject('Change Password');
+		$transport = new SmtpTransport();
+		$options = new SmtpOptions(array(
+				'name' => 'localhost',
+				'host' => 'smtp.gmail.com',
+				'connection_class' => 'login',
+				'port' => '465',
+				'connection_config' => array(
+						'ssl' => 'ssl', /* Page would hang without this line being added */
+						'username' => '',
+						'password' => '',
+				),
+		));
+		$transport->setOptions($options);
+		$transport->send($mail);
+		return;
+	}
+	
+	public function changepasswordAction() {
+
+		if(isset($_GET['unique_key']) || $_POST['unique_key']) {
+
+			$form = new ChangePasswordForm();
+			$form->get('submit')->setValue('Change');
+			$form->get('unique_key')->setValue($_GET['unique_key']);
+			
+			
+			$request = $this->getRequest();
+			if ($request->isPost()) {
+				$userObj = new ChangePasswordEntity();
+				$form->setInputFilter($userObj->getInputFilter());
+				
+				$form->setData($request->getPost());
+			
+				if ($form->isValid()) {
+					$userObj->exchangeArray($form->getData());					
+					$result = $this->getUserTable()->getUser(array('link' => $_POST['unique_key']));
+
+					if(isset($result)) {
+						$this->getUserTable()->updateUser(array('password'=> md5(utf8_encode($userObj->password)) ) , array('id'=>$result->id));
+						return $this->redirect()->toRoute('login');
+					}else{
+					// todo plz select right link	
+					}					
+				}
+			}
+			
+			return array('changePasswordForm' => $form);
+				
+		}else {
+			return $this->redirect()->toRoute('home');
+		}
 	}
 }

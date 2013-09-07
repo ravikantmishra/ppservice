@@ -1,4 +1,10 @@
 <?php 
+/*
+ * Organization: OSSCube
+* Added: Sanchit Puri
+* Scope: Feedback Table class interact with the database table feedback
+* Dated: 05-09-2013
+*/
 
 namespace Communicate\Model;
 use Zend\Db\Adapter\Adapter;
@@ -23,6 +29,7 @@ class FeedbackTable extends AbstractTableGateway
         return $resultSet;
     }
 
+    // used to insert the data coming from feedback form into the database table feedback
     public function saveFeedback(Feedback $feedback)
     {
         $data = array(
