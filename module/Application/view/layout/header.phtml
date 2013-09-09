@@ -6,8 +6,11 @@
 	
 	
 	<?php 
-	session_start();
-	if(!isset($_SESSION['user'])) {
+	use Zend\Session\Container;
+	
+	$container = new Container('user');
+	$data= $container->frontidsession;
+	if(!$data) {
 	?>
 	<a href="<?php echo $this->url('login'); ?>">
 	<img alt="Login" src="<?php $this->basepath('public')?>/images/login_img.png"></a>
