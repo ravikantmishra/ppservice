@@ -27,7 +27,6 @@ class UserTable {
 	public function saveUser($data) {
 		$this->tableGateway->insert ( $data );
 		$lastId =  $this->tableGateway->lastInsertValue;
-		 
 		return $lastId;		
 	}
 	
@@ -61,12 +60,13 @@ class UserTable {
 
 	// Fucntion to valid the user at the time of login
 	public function validateUser(LoginEntity $login) {
-		
+
 		$where = new Where();
 		$where->equalTo( 'user_name', $login->user_name );
+		$where->AND->equalTo( 'status', 'active');
 		$where->OR->equalTo( 'email', $login->user_name );
 		
-		$row = $this->tableGateway->select ($where)->current ();
+		$row = $this->tableGateway->select ($where)->current();
 
 		if (! $row) {
 			return false;
