@@ -19,7 +19,6 @@ class RegisterEntity implements InputFilterAwareInterface
 	public $status;
 	protected $inputFilter;
 
-	
 	public function exchangeArray($data)
 	{
 		$this->id     = (isset($data['id']))     ? $data['id']     : null;

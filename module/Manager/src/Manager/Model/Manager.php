@@ -13,7 +13,8 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 class Manager
 {
-    public $id;
+    
+	public $id;
     public $username;
     public $password;
     public function exchangeArray($data)

@@ -21,9 +21,6 @@ class AdminEntity implements InputFilterAwareInterface
 	protected $inputFilter;
 
 	
-	
-	
-	
 	public function exchangeArray($data)
 	{
 		$this->id     = (isset($data['id']))     ? $data['id']     : null;

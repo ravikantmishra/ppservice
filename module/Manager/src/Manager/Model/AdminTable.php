@@ -18,7 +18,6 @@ use Zend\Db\Sql\Update;
 
 class AdminTable
 {
-	
 	protected $tableGateway;
 	public function __construct(TableGateway $tableGateway) {
 		$this->tableGateway = $tableGateway;

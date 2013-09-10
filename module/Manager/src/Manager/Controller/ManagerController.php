@@ -474,11 +474,11 @@ class ManagerController extends AbstractActionController
     }
     
     /*
-     * Function use for  user  listing
+     *  Function use for  user  listing
     */
     
     
-    public function registerAction()
+    public  function registerAction()
     {
     	
     	

@@ -19,7 +19,6 @@ class ContactEntity implements InputFilterAwareInterface
 	public $seen;
 	protected $inputFilter;
 
-
 	
 	public function exchangeArray($data)
 	{

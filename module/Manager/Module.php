@@ -115,6 +115,7 @@ class Module implements AutoloaderProviderInterface {
 							$table = new RegisterTable($tableGateway);
 							return $table;
 						},
+						
 						'RegisterTableGateway' => function ($sm) {
 							$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 							$resultSetPrototype = new ResultSet();

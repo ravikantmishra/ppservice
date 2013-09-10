@@ -19,7 +19,6 @@ class FeedbackEntity implements InputFilterAwareInterface
 	public $seen;
 	protected $inputFilter;
 
-
 	
 	public function exchangeArray($data)
 	{
