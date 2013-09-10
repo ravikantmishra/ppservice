@@ -15,6 +15,8 @@ use Zend\Config\Config;
 
 class ManagerTable extends AbstractTableGateway
 {
+	
+	
     protected $table ='admin';
     public function __construct(Adapter $adapter)
     {

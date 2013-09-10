@@ -95,7 +95,22 @@ function checkEmail(email){
     
     var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
     if (reg.test(email)){
-    	$('#emailMgs').html(" ");
+
+    	$('#userNameMgs').html(" ");
+    	$.ajax({
+            url: 'Register/checkemail',
+            data: $('#user').serialize(),
+            type: 'POST',
+            success: function (select) {
+               if($.trim(select) == 'true') {
+            	   $('#emailMgs').html("Email name already exist");
+            	   $('#email').val('');
+               }
+              },
+            complete: function () {
+            }
+        });
+
     return true; 
    }
     else{

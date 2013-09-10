@@ -109,13 +109,11 @@ class Module implements AutoloaderProviderInterface {
 							$resultSetPrototype->setArrayObjectPrototype(new FeedbackEntity());
 							return new TableGateway('feedback', $dbAdapter, null, $resultSetPrototype);
 						},
-						
 						'RegisterTable' =>  function($sm) {
 							$tableGateway = $sm->get('RegisterTableGateway');
 							$table = new RegisterTable($tableGateway);
 							return $table;
 						},
-						
 						'RegisterTableGateway' => function ($sm) {
 							$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 							$resultSetPrototype = new ResultSet();

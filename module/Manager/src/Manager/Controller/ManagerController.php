@@ -24,6 +24,7 @@ use Manager\Model\Entity\ContactEntity;
 use Manager\Model\Entity\FeedbackEntity;
 use Manager\Model\Entity\RegisterEntity;
 
+
 class ManagerController extends AbstractActionController
 {
 	protected $managerTable;

@@ -57,11 +57,11 @@ class UserController extends AbstractActionController {
 					return  $this->redirect()->toRoute('home');
 				}
 				else{
-									
+					$message="Wrong username password";
+					$this->flashmessenger()->addMessage($message);
 				}
 			}
-		}
-		
+		}		
 		return array('loginForm' => $form);
 	}
 	
@@ -119,11 +119,13 @@ class UserController extends AbstractActionController {
 				$result = $this->getUserTable()->getUser(array('email' => $userObj->email));
 				
 				if(isset($result)) {
+
+					$result = (array)$result[0];// done so that multi level array lead to single level
 					
-					$encryptLink = $result->id.'_'.$result->email.'_'.$result->user_name;
+					$encryptLink = $result['id'].'_'.$result['email'].'_'.$result['user_name'];
 					$result = (array)$result;
 					$result['link']=md5(utf8_decode($encryptLink));
-										
+				
 					$this->mailConfiguration($result);					
 					$this->getUserTable()->updateUser(array('link' => $result['link']), array('user_name' => $result['user_name']));
 					//to do set mgs that mail has been send
@@ -147,8 +149,9 @@ class UserController extends AbstractActionController {
 		
 		$bodyMessage = new \Zend\Mime\Part($html);
 		$bodyMessage->type = 'text/html';
-		 $bodyPart->setParts(array($bodyMessage));
+		$bodyPart->setParts(array($bodyMessage));
 
+		
     	$mail->setBody($bodyPart);
 		$mail->setFrom('ramandeep.singh@osscube.com', 'admin');
 		$mail->addTo($emailLinkArray['email']);
@@ -161,11 +164,12 @@ class UserController extends AbstractActionController {
 				'port' => '465',
 				'connection_config' => array(
 						'ssl' => 'ssl', /* Page would hang without this line being added */
-						'username' => '',
-						'password' => '',
+						'username' => 'ramandeep.singh@osscube.com',
+						'password' => 'raman123',
 				),
 		));
 		$transport->setOptions($options);
+		
 		$transport->send($mail);
 		return;
 	}
@@ -191,7 +195,11 @@ class UserController extends AbstractActionController {
 					$result = $this->getUserTable()->getUser(array('link' => $_POST['unique_key']));
 
 					if(isset($result)) {
-						$this->getUserTable()->updateUser(array('password'=> md5(utf8_encode($userObj->password)) ) , array('id'=>$result->id));
+						$result = (array)$result[0];// done so that multi level array lead to single level
+						echo "<pre>";
+						print_r($result);
+						die;
+						$this->getUserTable()->updateUser(array('password'=> md5(utf8_encode($userObj->password)) ) , array('id'=>$result['id']));
 						return $this->redirect()->toRoute('login');
 					}else{
 					// todo plz select right link	
@@ -205,4 +213,28 @@ class UserController extends AbstractActionController {
 			return $this->redirect()->toRoute('home');
 		}
 	}
+	
+	
+	public function checkemailAction() {
+
+		$request = $this->getRequest();
+	
+		if ($request->isPost()) {
+			$result =  $this->getUserTable()->getUser(array('email'=>$_POST['email']));
+
+			if($result) {
+				$check = true;
+			}else {
+				$check = false;
+			}
+			
+			$response = $this->getResponse();
+			$response->setContent(json_encode($check));
+			return $response;
+	
+		}else {
+			return $this->redirect()->toRoute('home');
+		}
+	}
+	
 }

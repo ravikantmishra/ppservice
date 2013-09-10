@@ -17,6 +17,7 @@ use Zend\Db\Sql\Update;
 
 class ContactTable
 {
+	
 	protected $tableGateway;
 	public function __construct(TableGateway $tableGateway) {
 		$this->tableGateway = $tableGateway;

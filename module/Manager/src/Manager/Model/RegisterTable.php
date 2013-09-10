@@ -22,6 +22,7 @@ class RegisterTable
 		$this->tableGateway = $tableGateway;
 	}
 
+	
 	public function saveUser(RegisterEntity $userObj) {
 
 
