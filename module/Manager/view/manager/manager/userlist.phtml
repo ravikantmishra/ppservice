@@ -24,7 +24,7 @@ function ActiveData(id,status)
 
 </script>
 <?php
-$title = 'Admin user list';
+$title = 'Admin User List';
 $this->headTitle($title);
 $form = $this->form;
 $form->setAttribute('action', $this->url('manager', array('action' => 'adduser')));
@@ -32,6 +32,14 @@ $form->prepare();
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
 ?>
+
+<table width="100%">
+<tr>
+<td style="padding-left:15px;">
+<b><?php echo $title?></b>
+</td>
+</tr>
+</table>
 <table align="center" width="85%"  class="adminadduser"> 
 	<tr>
 		<td>
@@ -74,7 +82,10 @@ echo $this->formHidden($form->get('id'));
 			Action
 		</td>
 	</tr>
-	<?php foreach($this->userlist as $row) : ?>
+	<?php 
+	if(count($this->userlist)>0)
+	{
+	foreach($this->userlist as $row) : ?>
     <tr>
        <td><?php echo $row->firstname;?></td>
        <td><?php echo $row->lastname;?></td>
@@ -88,7 +99,19 @@ echo $this->formHidden($form->get('id'));
        <a href="<?php echo $this->url('manager',array('action'=>'admindelete', 'id' => $row->id));?>" Onclick="return ConfirmDelete();">Delete</a>
        </td>
     </tr>
-    <?php endforeach; ?>
+    <?php endforeach;
+	}
+	else 
+	{
+		?>
+		<tr>
+		<td colspan="6" align="center">
+			No Record Found
+		</td>
+		</tr>
+		<?php 
+	}
+    ?>
 	
 </table>
 

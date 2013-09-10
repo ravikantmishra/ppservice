@@ -1,6 +1,6 @@
 <?php
 /*
- * Organization: OSSCube
+* Organization: OSSCube
 * Added: Sanchit Puri
 * Scope: Coomunicate module controller for Contact Us and Feedback
 * Dated: 05-09-2013

@@ -1,0 +1,128 @@
+<script>
+function ConfirmDelete()
+{
+	var x = confirm("Are you sure you want to delete?");
+	if (x)
+		return true;
+	else
+		return false;
+}
+
+function ActiveData(id,status)
+{
+	var dataString = 'id='+ id+'status='+status;
+	//alert(dataString);
+	var dataString = 'id='+ id;
+	$.ajax({type:"POST", url: "<?php echo $this->url('manager',array('action'=>'activeuserlist')); ?>",
+	data:dataString, success: function(response) {
+		var txt=response;
+		alert(txt);
+		document.getElementById("act").innerHTML=txt;
+	}});
+}
+
+</script>
+<?php
+$title = 'User List';
+$this->headTitle($title);
+
+?>
+<table>
+<tr>
+<td style="padding-left:15px;">
+<b><?php echo $title?></b>
+</td>
+</tr>
+</table>
+
+</table>
+<table align="center" width="85%"  class="adminadduser"> 
+	<tr>
+		<td>
+		<?php 
+			if(isset($flashMessage) && !empty($flashMessage)) 
+			{
+			?>
+		    	<?php 
+		    	foreach ($flashMessage as $msg)
+		    	{
+		    	?>
+			  <div><?php echo $msg; ?></div>
+		    	<?php  
+		    	}
+		    	?>
+			<?php 
+			}
+			?>
+		</td>
+	</tr>
+	<tr class="tablerow">
+		<td>
+			User Name
+		</td>
+		<td>
+			Email
+		</td>
+		<td>
+			First Name
+		</td>
+		<td>
+			last Name
+		</td>
+	
+		<td>
+			Status
+		</td>
+	
+		<td>
+			Action
+		</td>
+	</tr>
+	<?php 
+	if(count($this->listuser)>0)
+	{
+	
+	foreach($this->listuser as $row) : 
+	?>
+    <tr>
+       <td><?php echo $row->user_name;?></td>
+       <td><?php echo $row->email;?></td>
+       <td><?php echo $row->first_name;?></td>
+       <td><?php echo $row->last_name;?></td>
+       
+       <td>
+       	<a href="<?php echo $this->url('manager',array('action'=>'registeractivelist', 'id' => $row->id,'status'=>$row->status));?>"><?php if($row->status=='active') {?><div id='act'>Active</div><?php } else{ echo "Inactive"; }?> </a>
+       
+       </td>
+       <td>
+       <a href="<?php echo $this->url('manager',array('action'=>'registerlistdelete', 'id' => $row->id));?>" Onclick="return ConfirmDelete();">Delete</a>
+       </td>
+    </tr>
+    
+    
+    <?php
+    endforeach;
+	}
+	else 
+	{
+	?>
+	<td colspan="6" align="center">No Record Found </td>					       
+	<?php 
+	}
+    
+    
+    ?>
+    
+   
+	
+</table>
+
+
+
+
+
+
+
+
+
+

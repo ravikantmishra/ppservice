@@ -1,0 +1,122 @@
+<script>
+function ConfirmDelete()
+{
+	var x = confirm("Are you sure you want to delete?");
+	if (x)
+		return true;
+	else
+		return false;
+}
+
+function ActiveData(id,status)
+{
+	var dataString = 'id='+ id+'status='+status;
+	//alert(dataString);
+	var dataString = 'id='+ id;
+	$.ajax({type:"POST", url: "<?php echo $this->url('manager',array('action'=>'activeuserlist')); ?>",
+	data:dataString, success: function(response) {
+		var txt=response;
+		alert(txt);
+		document.getElementById("act").innerHTML=txt;
+	}});
+}
+
+</script>
+<?php
+$title = 'Feedback List';
+$this->headTitle($title);
+
+?>
+<table>
+<tr>
+<td style="padding-left:15px;">
+<b><?php echo $title?></b>
+</td>
+</tr>
+</table>
+<table align="center" width="85%"  class="adminadduser"> 
+	<tr>
+		<td>
+		<?php 
+			if(isset($flashMessage) && !empty($flashMessage)) 
+			{
+			?>
+		    	<?php 
+		    	foreach ($flashMessage as $msg)
+		    	{
+		    	?>
+			  <div><?php echo $msg; ?></div>
+		    	<?php  
+		    	}
+		    	?>
+			<?php 
+			}
+			?>
+		</td>
+	</tr>
+	<tr class="tablerow">
+		<td>
+			Name
+		</td>
+		<td>
+			Email
+		</td>
+		<td>
+			Mobile No
+		</td>
+		<td>
+			Comment
+		</td>
+	
+		<td>
+			Seen
+		</td>
+	
+		<td>
+			Action
+		</td>
+	</tr>
+	
+	<?php
+	 if(count($this->feedbacklist)>0)
+	 {
+	 
+	 foreach($this->feedbacklist as $row) : 
+	?>
+    <tr>
+       <td><?php echo $row->name;?></td>
+       <td><?php echo $row->email;?></td>
+       <td><?php echo $row->mobile_number;?></td>
+       <td><?php echo $row->comment;?></td>
+       <td>
+       	<a href="<?php echo $this->url('manager',array('action'=>'feedbackactivelist', 'id' => $row->id,'status'=>$row->seen));?>"><?php if($row->seen=='active') {?><div id='act'>Active</div><?php } else{ echo "Inactive"; }?> </a>
+       
+       </td>
+       <td>
+       <a href="<?php echo $this->url('manager',array('action'=>'feedbacklistdelete', 'id' => $row->id));?>" Onclick="return ConfirmDelete();">Delete</a>
+       </td>
+    </tr>
+    <?php endforeach; 
+	 }
+	 else 
+	 {
+	 	?>
+	 	<tr>
+	 	<td colosapn="6" align="center">No Record Found </td>
+	 	</tr>
+	 	<?php 
+	 }
+    ?>
+    
+   
+	
+</table>
+
+
+
+
+
+
+
+
+

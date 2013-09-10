@@ -45,7 +45,9 @@ class AdminForm extends Form
 				'name' => 'email',
 				'attributes' => array(
 						'type'  => 'text',
+						'id' => 'email',
 						'required'=>'required',
+						'onblur' => 'checkEmail(this.value);',
 				),
 				'options' => array(
 						'label' => 'Email',

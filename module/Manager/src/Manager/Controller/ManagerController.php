@@ -11,28 +11,38 @@ use Zend\View\Model\ViewModel;
 use Manager\Model\Manager;    
 use Manager\Model\ManagerTable;
 use Manager\Model\AdminTable;
+use Manager\Model\ContactTable;
+use Manager\Model\RegisterTable;
+use Manager\Model\FeedbackTable;
 use Manager\Form\ManagerForm; 
 use Manager\Form\AdminForm;
 use Zend\Session\Config\StandardConfig;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
 use Manager\Model\Entity\AdminEntity;
+use Manager\Model\Entity\ContactEntity;
+use Manager\Model\Entity\FeedbackEntity;
+use Manager\Model\Entity\RegisterEntity;
+
 class ManagerController extends AbstractActionController
 {
 	protected $managerTable;
 	protected $adminTable;
+	protected $contactTable;
+	protected $feedbackTable;
+	protected $userTable;
 	protected $form;
 	protected $storage;
 	protected $authservice;
 	public $viewmodel;
 
+	
 	public function getAuthService()
     {
         if (! $this->authservice) {
             $this->authservice = $this->getServiceLocator()
                                       ->get('AuthService');
         }
-        
         return $this->authservice;
     }
 	
@@ -46,21 +56,56 @@ class ManagerController extends AbstractActionController
             $sm = $this->getServiceLocator();            
             $this->managerTable = $sm->get('\Manager\Model\ManagerTable');
         }
-        
         return $this->managerTable;
     }
-    
+    /*
+     *  Function use for getting the object of admin table class
+    */
     
     public function getAdminTable()
     {
     	if (!$this->adminTable) {
     		$this->adminTable = $this->getServiceLocator ()->get ( 'AdminTable' );
     	}
-    
     	return $this->adminTable;
     }
     /*
-     *  Function use for getting the object of manager table class
+     *  Function use for getting the object of contact table class
+    */
+    
+    public function getContactTable()
+    {
+    	if (!$this->contactTable) {
+    		$this->contactTable = $this->getServiceLocator ()->get ( 'ContactTable' );
+    	}
+    	return $this->contactTable;
+    }
+    
+    
+    public function getFeedbackTable()
+    {
+    	if (!$this->feedbackTable) {
+    		$this->feedbackTable = $this->getServiceLocator ()->get ('FeedbackTable');
+    	}
+    	return $this->feedbackTable;
+    }
+    
+    
+    public function getRegisterTable()
+    {
+    	if (!$this->userTable) {
+    		$this->userTable = $this->getServiceLocator()->get('RegisterTable');
+    	}
+    	return $this->userTable;
+    }
+    
+    
+    
+    
+    
+    
+    /*
+     *  Function use for define the service of manager  class
     */
    
 	public function getSessionStorage()
@@ -69,9 +114,14 @@ class ManagerController extends AbstractActionController
             $this->storage = $this->getServiceLocator()
                                   ->get('Manager\Model\MyAuthStorage');
         }
-        
         return $this->storage;
     }
+    
+
+    /*
+     *  Function use for getting the object of manager table class
+    */
+    
     
     public function getForm()
     {
@@ -80,7 +130,6 @@ class ManagerController extends AbstractActionController
             $builder    = new AnnotationBuilder();
             $this->form = $builder->createForm($user);
         }
-        
         return $this->form;
     }
 
@@ -101,7 +150,7 @@ class ManagerController extends AbstractActionController
     	}
     	else
     	{
-    		$messages="Sorry Your username or password is incorrect";
+    		$messages="Sorry Your username or password is incorrect.";
     		return $this->redirect()->toRoute('manager', array('action' => 'index','flashMessages'=> $this->flashmessenger()->getMessages()));
     	}
 	    
@@ -156,7 +205,7 @@ class ManagerController extends AbstractActionController
                 }
                 else
                 {
-                	$message="Your username and password Incorrect";
+                	$message="Your username and password Incorrect.";
                 	$this->flashMessenger()->addMessage($message);
 				 }
 				 
@@ -172,8 +221,6 @@ class ManagerController extends AbstractActionController
   	/*
   	 * Function use for add user Action
   	 */
-  		
-
   		
   		
     public function adduserAction()
@@ -193,15 +240,11 @@ class ManagerController extends AbstractActionController
         	if ($form->isValid()) {
         		$userObj->exchangeArray($form->getData());
         		$this->getAdminTable()->saveUser($userObj);
-        		$message="Admin user added successfully";
+        		$message="Admin user added successfully.";
         		$this->flashmessenger()->addMessage($message);
-        		
         	}
-        	
         	return $this->redirect()->toRoute('manager', array('action' => 'userlist'));
         }
-
-       
        	return array('form' => $form);
     }
     
@@ -223,32 +266,127 @@ class ManagerController extends AbstractActionController
     	));
 	
     }
+    /*
+     * Function use for  contact user listing
+    */
     
+    
+   public function contactlistdeleteAction()
+   {
+   	$id = (int) $this->params()->fromRoute('id', 0);
+   	 
+   	if (!$id) {
+   		return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
+   	}
+   	$request = $this->getRequest();
+   	$this->getContactTable()->deleteContact($id);
+   	$message="Record deleted Successfully.";
+   	$this->flashmessenger()->addMessage($message);
+   	return $this->redirect()->toRoute('manager',array('action'=>'contact'));
+   }
+ 
+   /*
+    * Function use for  feed back  listing
+   */
+   
+   public function feedbacklistdeleteAction()
+   {
+   	
+   	$id = (int) $this->params()->fromRoute('id', 0);
+   	 
+   	if (!$id) {
+   		return $this->redirect()->toRoute('manager',array('action'=>'feedback'));
+   	}
+   	$request = $this->getRequest();
+   	$this->getFeedbackTable()->deleteFeedback($id);
+   	$message="Record deleted Successfully.";
+   	$this->flashmessenger()->addMessage($message);
+   	return $this->redirect()->toRoute('manager',array('action'=>'feedback'));
+   	
+   	
+   }
+   
+   
+   
+   
+   
     
     /*
-     * Function use for  admin user delete data
+     * Function use for delete admin user data 
     */
     
     
     Public function admindeleteAction()
     {
-    	
-    	 $id = (int) $this->params()->fromRoute('id', 0);
-    	
+    	$id = (int) $this->params()->fromRoute('id', 0);
     	if (!$id) {
     		return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
     	}
-    	
     	$request = $this->getRequest();
     	$this->getAdminTable()->deleteAdmin($id);
-    	
-    	$message="Record deleted Successfully";
-    	
+    	$message="Record deleted Successfully.";
     	$this->flashmessenger()->addMessage($message);
-    		
     	return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
     }
     	
+    /*
+     * Function use for  user  listing
+    */
+    
+    
+    Public function registerlistdeleteAction()
+    {
+    	$id = (int) $this->params()->fromRoute('id', 0);
+    	if (!$id) {
+    		return $this->redirect()->toRoute('manager',array('action'=>'register'));
+    	}
+    	$request = $this->getRequest();
+    	$this->getRegisterTable()->deleteRegister($id);
+    	$message="Record deleted Successfully.";
+    	$this->flashmessenger()->addMessage($message);
+    	return $this->redirect()->toRoute('manager',array('action'=>'register'));
+    }
+    
+    
+    
+    
+    
+    /*
+     * Function use for delete contact  data
+    */
+    
+    
+    function contactactivelistAction()
+    {
+    	$id = (int) $this->params()->fromRoute('id', 0);
+    	$status =  $this->params()->fromRoute('status', 'inactive');
+    	if($id!="" && $status!="")
+    	{
+    	$contact = $this->getContactTable()->getContact($id);
+    	if($contact->seen == 'active'){ $check = 'inactive'; }else {$check = 'active';}
+    	$this->getContactTable()->updateContact(array('seen'=>$check),array('id'=>$contact->id));
+    	return $this->redirect()->toRoute('manager',array('action'=>'contact'));
+    	}
+    }
+    
+
+    /*
+     * Function use for  feed back active deactive functinality
+    */
+
+    function feedbackactivelistAction()
+    {
+    	$id = (int) $this->params()->fromRoute('id', 0);
+    	$status =  $this->params()->fromRoute('status', 'inactive');
+    	if($id!="" && $status!="")
+    	{
+	    	$contact = $this->getFeedbackTable()->getFeedback($id);
+	    	if($contact->seen == 'active'){ $check = 'inactive'; }else {$check = 'active';}
+	    	$this->getFeedbackTable()->updateFeedback(array('seen'=>$check),array('id'=>$contact->id));
+	    	return $this->redirect()->toRoute('manager',array('action'=>'feedback'));
+    	}
+    }
+    
 
     /*
      * Function use for  active user data
@@ -260,16 +398,36 @@ class ManagerController extends AbstractActionController
     	
     	$id = (int) $this->params()->fromRoute('id', 0);
     	$status = (int) $this->params()->fromRoute('status', 0);
-    	$contact = $this->getAdminTable()->getAdmin($id);
-    	$this->getAdminTable()->updateAdmin(array('status'=>($contact->status) ? 0:1),array('id'=>$contact->id));
-    	return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
-		    	
+    	if($id!="" && $status!="")
+    	{
+	    	$contact = $this->getAdminTable()->getAdmin($id);
+	    	$this->getAdminTable()->updateAdmin(array('status'=>($contact->status) ? 0:1),array('id'=>$contact->id));
+	    	return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
+    	}
     }
     
     
+
+    /*
+     * Function use for  active user data
+    */
     
+
+    function registeractivelistAction()
+    {
+    	$id = (int) $this->params()->fromRoute('id', 0);
+    	$status =  $this->params()->fromRoute('status', 'inactive');
+    	if($id!="" && $status!="")
+    	{
+	    	$registerData = $this->getRegisterTable()->getRegister($id);
+	    	if($registerData->status == 'active'){ $check = 'inactive'; }else {$check = 'active';}
+	    	$this->getRegisterTable()->updateRegister(array('status'=>$check),array('id'=>$registerData->id));
+	    	return $this->redirect()->toRoute('manager',array('action'=>'register'));
+    	}
+    	 
+    }
     
-    
+  
     
     /*
      * Function use for admin user Action
@@ -283,10 +441,62 @@ class ManagerController extends AbstractActionController
     }
     
     /*
-     * Function use for admin session logout
+     * Function use for change status for contact table
     */
     
-	
+    public function contactAction()
+    {
+    	$container = new Container('namespace');
+    	$container->adminsession;
+    	$manager = new Manager();
+    	$flashMessages = $this->flashMessenger()->getMessages();
+    	return new ViewModel(array(
+    			'contactlist' => $this->getContactTable()->fetchAll(),'flashMessage' => $flashMessages,
+    	));
+    	
+    }
+    
+
+    /*
+     * Function use for fetch all feedback table data
+    */
+    
+    public function feedbackAction()
+    {
+    	$container = new Container('namespace');
+    	$container->adminsession;
+    	$manager = new Manager();
+    	$flashMessages = $this->flashMessenger()->getMessages();
+    	return new ViewModel(array(
+    			'feedbacklist' => $this->getFeedbackTable()->fetchAll(),'flashMessage' => $flashMessages,
+    	));
+    	
+    }
+    
+    /*
+     * Function use for  user  listing
+    */
+    
+    
+    public function registerAction()
+    {
+    	
+    	
+    	$container = new Container('namespace');
+    	$container->adminsession;
+    	$flashMessages = $this->flashMessenger()->getMessages();
+    	return new ViewModel(array(
+    			'listuser' => $this->getRegisterTable()->fetchAll(),'flashMessage' => $flashMessages,
+    	));
+    	 
+    }
+    
+    
+    /*
+     * Function use for logout admin session 
+    */
+    
+
 	public function logoutAction()
     {
     	$config = new StandardConfig();

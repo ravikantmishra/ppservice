@@ -17,7 +17,7 @@ return array(
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'id'     => '[0-9]+',
-                    	'status'=>'[0-9]+',
+                    	'status'=>'[a-zA-Z0-9]+',
                     ),
                     'defaults' => array(
                         'controller' => 'Manager\Controller\Manager',
@@ -39,9 +39,13 @@ return array(
                             'defaults' => array(
                             ),
                         ),
+ 	
+                    		
                     ),
                 ),
             ),
+        		
+   		
 
         		
         ),
@@ -52,6 +56,11 @@ return array(
 				'template_path_stack' => array(
 						'manager' => __DIR__ . '/../view',
 				),
+				
+				'template_map' => array(
+						'paginator-slide' => __DIR__ . '/../view/customlayout/slidePaginator.phtml',
+				),
+				
 				'template_map' => array(
 						'customLayout' => __DIR__.'/../view/customlayout/layout.phtml'
 				)
