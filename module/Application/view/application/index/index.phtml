@@ -1,11 +1,28 @@
 <div class="wrapper">
   <div class="banner"><img alt="Passport Services" src="<?php $this->basepath('public')?>/images/banner.gif"></div>
+ <?php
+				if(isset($flashMessage) && !empty($flashMessage))
+				{
+					?>
+					<div id="flash_notice" class="alertBox"> 
+					<?php 
+					foreach($flashMessage as $msg)
+					{
+						echo $msg;
+					}
+					?>
+					</div>
+					<?php 
+				}
+				
+				
+			?>
   <div class="container_main">
     <div class="new_container">
       <!--Heading Container Section Starts Here-->
       <div class="heading_container">
                 <div class="heading_container_left"></div>
-         
+      
         <div class="heading_containerbg">
           <div class="page_heading">Welcome to Passport Services LLC</div>
         </div>
@@ -17,6 +34,11 @@
         <div class="bodyContent">
           <div class="introductory_content">
             <div class="passport_visa_img"><img alt="Passport Services" src="<?php $this->basepath('public')?>/images/passport_visa_img.gif"></div>
+            
+            
+           
+            
+            
             <div class="intro_text">PassportservicesLLC provides you the
  most secure, easiest and fastest way to apply for passports and Visas 
 for various Countries.

@@ -57,12 +57,20 @@ class UserController extends AbstractActionController {
 					return  $this->redirect()->toRoute('home');
 				}
 				else{
-					$message="Wrong username password";
+					$message="The username and/or password is invalid.";
 					$this->flashmessenger()->addMessage($message);
 				}
 			}
 		}		
-		return array('loginForm' => $form);
+		$flashMessages = $this->flashMessenger()->getCurrentMessages();
+		$this->flashMessenger()->clearCurrentMessages();
+		$this->flashMessenger()->clearMessages();
+		return array('loginForm' => $form,
+				'flashMessage' => $flashMessages,
+		);
+		
+		 
+				
 	}
 	
 	//register action
@@ -89,6 +97,10 @@ class UserController extends AbstractActionController {
 				
 				$lastId = $this->getUserTable()->saveUser($data);
 				$this->getUserTable()->setUserSession('frontidsession',$lastId);
+				
+				$message="You have registered successfully.";
+				$this->flashmessenger()->addMessage($message);
+				
 				return $this->redirect()->toRoute('home');
 			}
 		}
@@ -181,7 +193,7 @@ class UserController extends AbstractActionController {
 			$form = new ChangePasswordForm();
 			$form->get('submit')->setValue('Change');
 			$form->get('unique_key')->setValue($_GET['unique_key']);
-			
+			$form->get('first_last_name')->setValue();
 			
 			$request = $this->getRequest();
 			if ($request->isPost()) {

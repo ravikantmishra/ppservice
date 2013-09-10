@@ -31,7 +31,7 @@
     <ul>
       <li>
       <a  class="selected" href="<?php echo $this->url('application') ?>" ><?php echo $this->translate('Home') ?></a></li>
-      <li><a  href="<?php //echo $this->url('apply') ?>" ><?php echo $this->translate('Apply Passport/Visa') ?></a></li>
+      <li><a  href="<?php echo $this->url('application',array('action' => 'newApplication')) ?>" ><?php echo $this->translate('Apply Passport/Visa') ?></a></li>
       <li><a  href="<?php echo $this->url('communicate',array('action' => 'feedback')) ?>" ><?php echo $this->translate('Feedback') ?></a></li>
       <li><a  href="<?php echo $this->url('communicate',array('action' => 'contactus')) ?>" ><?php echo $this->translate('Contact Us') ?></a></li>
       <li><a  href="<?php echo $this->url('info',array('action'=>'howtoapply')) ?>" ><?php echo $this->translate('How To Apply') ?></a></li>

@@ -40,7 +40,19 @@ echo $this->form()->openTag($form);
   <th><label for="signin_username"><?php echo $this->formLabel($form->get('user_name')); ?></label></th>
   <td>
   <ul class="error_list">
-<li id="userNameMgs"></li>
+<li id="userNameMgs">
+<?php
+		if(isset($flashMessage) && !empty($flashMessage))
+		{
+			foreach($flashMessage as $msg)
+			{
+				echo $msg;
+			}
+		}
+		
+		
+		?>
+</li>
 </ul>
   <?php echo $this->formInput($form->get('user_name')); ?></td>
 </tr>

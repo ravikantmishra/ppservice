@@ -45,7 +45,13 @@ class ChangePasswordForm extends Form
 				'attributes' => array(
 						'type'  => 'hidden',
 				)
-		));		
+		));	
+		$this->add(array(
+				'name' => 'first_last_name',
+				'attributes' => array(
+						'type'  => 'hidden',
+				)
+		));
 		$this->add(array(
 				'name' => 'submit',
 				'attributes' => array(
