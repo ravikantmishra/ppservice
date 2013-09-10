@@ -1,0 +1,82 @@
+<div class="clear"></div>
+<div class="wrapper">
+  <div class="clear">&nbsp;</div>
+  <!--Main Container Section Starts Here-->
+  <div class="container_main">
+    <div class="new_container">
+      <!--Heading Container Section Starts Here-->
+      <div class="heading_container">
+        <div class="heading_container_left"></div>
+        <div class="heading_containerbg">
+          <div class="page_heading">Select the Application type and Country for which you want to apply for Passport/Visa</div>
+        </div>
+        <div class="heading_container_right"></div>
+      </div>
+      <!--Heading Container Section Ends Here-->
+      <!--Form Inner/Inside Section Starts Here-->
+      <div class="form_inside_section">
+        <div class="bodyContent">
+        <div class="dlForm multiForm">
+          <?php
+				$form = $this->applyForm;
+				$form->prepare();
+				$form->setAttribute('action', $this->url('passportAplication') );
+				echo $this->form()->openTag($form);
+		?>
+            <div>
+              <!--Fieldset Section Starts Here-->
+              <fieldset class="bdr">
+              <legend class=" formHead"> Please select</legend>
+              <dl>
+                <dt>
+                  <label><?php echo $this->formLabel($form->get('application_type')); ?></label>
+                </dt>
+                <dd>
+                  <?php echo $this->formSelect($form->get('application_type')); ?>
+                         <div class="red" id="err_app_type"></div>
+                </dd>
+              </dl>
+              <dl>
+                <dt>
+                  <label><?php echo $this->formLabel($form->get('country')); ?></label>
+                </dt>
+                <dd>
+                  <?php echo $this->formSelect($form->get('country')); ?>
+                                  <div class="red" id="err_country_option"></div>
+                </dd>
+              </dl>
+              </fieldset>
+              <!--Fieldset Section Ends Here-->
+              <!--Button Section Starts Here-->
+              <div class="pixbr XY20">
+                <center id="multiFormNav">
+                  <div align="center">
+                    <table class="nobrd" align="center">
+                      <tbody>
+                        <tr>
+                          <td align="center"><div class="lblButton">
+                              <?php echo $this->formSubmit($form->get('submit')); ?>
+                            </div>
+                            <div class="lblButtonRight">
+                              <div class="btnRtCorner"></div>
+                            </div></td>
+                          <td align="center"><div class="lblButton">
+                              <a href="<?php echo $this->url('home'); ?>" border="0"><input value="Cancel" class="btnArea" type="button"></a>
+                            </div>
+                            <div class="lblButtonRight">
+                              <div class="btnRtCorner"></div>
+                            </div></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </center>
+              </div>
+              <!--Button Section Ends Here-->
+            </div>
+          <?php echo $this->form()->closeTag(); ?>
+          </div>
+        </div>
+      </div>
+      <!--Form Inner/Inside Section Ends Here-->
+    </div>

@@ -42,6 +42,8 @@ class UserController extends AbstractActionController {
 	// login action 
 	public function loginAction() {
 
+// 		echo __DIR__ . '/../../../view';
+// 		die;
 		$form = new LoginForm();
 		$form->get('submit')->setValue('Sign In');
 		
@@ -65,12 +67,10 @@ class UserController extends AbstractActionController {
 		$flashMessages = $this->flashMessenger()->getCurrentMessages();
 		$this->flashMessenger()->clearCurrentMessages();
 		$this->flashMessenger()->clearMessages();
+		//die('here');
 		return array('loginForm' => $form,
 				'flashMessage' => $flashMessages,
-		);
-		
-		 
-				
+		);				
 	}
 	
 	//register action
