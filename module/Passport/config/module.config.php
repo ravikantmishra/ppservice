@@ -33,7 +33,36 @@ return array(
 										),
 								),
 						),
-						
+						'visaAplication' => array(
+								'type'    => 'segment',
+								'options' => array(
+										'route'    => '/visaAplication',
+										'defaults' => array(
+												'controller' => 'Passport\Controller\Passport',
+												'action'     => 'applyvisa',
+										),
+								),
+						),
+						'savepassport' => array(
+								'type'    => 'segment',
+								'options' => array(
+										'route'    => '/savepassport',
+										'defaults' => array(
+												'controller' => 'Passport\Controller\Passport',
+												'action'     => 'savepassport',
+										),
+								),
+						),
+						'savevisa' => array(
+								'type'    => 'segment',
+								'options' => array(
+										'route'    => '/savevisa',
+										'defaults' => array(
+												'controller' => 'Passport\Controller\Passport',
+												'action'     => 'savevisa',
+										),
+								),
+						),
 				),
 		),
 		

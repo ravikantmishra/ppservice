@@ -20,7 +20,8 @@
           <?php
 				$form = $this->applyForm;
 				$form->prepare();
-				$form->setAttribute('action', $this->url('passportAplication') );
+				//$form->setAttribute('action', $this->url('passportAplication') );
+				$form->setAttribute('onsubmit', 'return fncSubmit()');
 				echo $this->form()->openTag($form);
 		?>
             <div>
@@ -55,7 +56,7 @@
                       <tbody>
                         <tr>
                           <td align="center"><div class="lblButton">
-                              <?php echo $this->formSubmit($form->get('submit')); ?>
+                              <?php echo $this->formSubmit($form->get('btnSubmit')); ?>
                             </div>
                             <div class="lblButtonRight">
                               <div class="btnRtCorner"></div>
@@ -80,3 +81,46 @@
       </div>
       <!--Form Inner/Inside Section Ends Here-->
     </div>
+    <script>
+    function fncSubmit(){
+
+     	var check = 1;
+    	if( $('#country').val() == "0" ) {
+    		$('#err_country_option').html("Please Select Country");
+    		check = 0;
+    	}
+    	if( $('#application_type').val() == "0" ) {
+    		$('#err_app_type').html("Please Select Application");
+    		check = 0;
+    	}
+    	if(check){
+    		var form = document.getElementById('passport');
+    		//form.setAttribute("method","POST");
+    		
+    		if($('#application_type').val() == 1) {        		
+        		form.setAttribute("action","<?php echo $this->url('passportAplication');?>");
+        		form.submit();
+        	}
+        	if($('#application_type').val() == 2 ){
+        		form.setAttribute("action","<?php echo $this->url('visaAplication');?>");
+        		form.submit();
+        	}
+    	}else{
+    		return false;
+    	}
+        return false;
+    }
+
+    function checkCountry($value) {
+        if($value != 0){
+        	$('#err_country_option').html("");
+        }
+    }
+
+    function checkApplicationType($value) {
+        if($value != 0){
+        	$('#err_app_type').html("");        	
+        }
+    }
+
+    </script>

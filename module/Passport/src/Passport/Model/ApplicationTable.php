@@ -13,20 +13,18 @@ use Zend\Session\Container;
 use Zend\Db\Sql;
 use Zend\Db\Sql\Where;
 
-class CountryTable {
+class ApplicationTable {
 	protected $tableGateway;
 	
 	public function __construct(TableGateway $tableGateway) {
 		$this->tableGateway = $tableGateway;
 	}
 	
-	public function fetchCountry($where = null){
+	public function saveApplication($data){
 
-		if(isset($where)){
-			return $this->tableGateway->select ($where);
-		}else {
-			return $this->tableGateway->select ();
-		}
-		
+		$data['date_of_birth']="01-01-1989";
+		$aa = $this->tableGateway->insert ( $data );
+		$lastId =  $this->tableGateway->lastInsertValue;
+		return $lastId;
 	}
 }
