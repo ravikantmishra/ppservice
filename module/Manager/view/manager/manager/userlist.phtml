@@ -45,14 +45,14 @@ echo $this->formHidden($form->get('id'));
 	<tr>
 		<td>
 		<?php 
-			if(isset($flashMessage) && !empty($flashMessage)) 
+			if(isset($Message) && !empty($Message)) 
 			{
 			?>
 		    	<?php 
-		    	foreach ($flashMessage as $msg)
+		    	foreach ($Message as $messg)
 		    	{
 		    	?>
-			  <div><?php echo $msg; ?></div>
+			  <div><?php echo $messg; ?></div>
 		    	<?php  
 		    	}
 		    	?>
@@ -88,10 +88,10 @@ echo $this->formHidden($form->get('id'));
 	{
 	foreach($this->userlist as $row) : ?>
     <tr>
-       <td><?php echo $row->firstname;?></td>
-       <td><?php echo $row->lastname;?></td>
+       <td><?php echo $row->first_name;?></td>
+       <td><?php echo $row->last_name;?></td>
        <td><?php echo $row->email;?></td>
-       <td><?php echo $row->username;?></td>
+       <td><?php echo $row->user_name;?></td>
        <td>
        	<a href="<?php echo $this->url('manager',array('action'=>'activeuserlist', 'id' => $row->id,'status'=>$row->status));?>"><?php if($row->status==1) {?><div id='act'>Active</div><?php } else{ echo "Inactive"; }?> </a>
        

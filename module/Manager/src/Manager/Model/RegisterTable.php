@@ -68,18 +68,16 @@ class RegisterTable
 	}
 
 
-
-	public function fetchAll($query = 0)
-	{
-
-		$resultSet = $this->tableGateway->select(function (Select $select){
-			$select->columns(array('id', 'user_name', 'email','first_name','last_name','status'));
-			$select->order(array('id asc'));
-		});
-
-			return $resultSet;
+	public function fetchAll(Select $select = null) {
+	
+		if (null === $select)
+			$select = new Select();
+		$data=$select->from($this->tableGateway->table);
+		$resultSet = $this->tableGateway->selectWith($select);
+		$resultSet->buffer();
+		return $resultSet;
 	}
-
+	
 
 	public function deleteRegister($id)
 	{

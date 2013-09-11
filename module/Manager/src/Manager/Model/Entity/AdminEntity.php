@@ -24,12 +24,12 @@ class AdminEntity implements InputFilterAwareInterface
 	public function exchangeArray($data)
 	{
 		$this->id     = (isset($data['id']))     ? $data['id']     : null;
-		$this->username = (isset($data['username'])) ? $data['username'] : null;
+		$this->user_name = (isset($data['user_name'])) ? $data['user_name'] : null;
 		$this->password  = (isset($data['password']))  ? $data['password']  : null;
 		$this->email  = (isset($data['email']))  ? $data['email']  : null;
 		$this->status  = (isset($data['status']))  ? $data['status']  : null;
-		$this->firstname = (isset($data['firstname'])) ? $data['firstname'] : null;
-		$this->lastname  = (isset($data['firstname']))  ? $data['firstname']  : null;
+		$this->first_name = (isset($data['first_name'])) ? $data['first_name'] : null;
+		$this->last_name  = (isset($data['last_name']))  ? $data['last_name']  : null;
 	}
 	
 
@@ -48,7 +48,7 @@ class AdminEntity implements InputFilterAwareInterface
 
 
 			$inputFilter->add($factory->createInput(array(
-					'name'     => 'username',
+					'name'     => 'user_name',
 					'required' => true,
 					'filters'  => array(
 							array('name' => 'StripTags'),
@@ -107,7 +107,7 @@ class AdminEntity implements InputFilterAwareInterface
 			)));
 
 			$inputFilter->add($factory->createInput(array(
-					'name'     => 'firstname',
+					'name'     => 'first_name',
 					'required' => true,
 					'filters'  => array(
 							array('name' => 'StripTags'),
@@ -126,7 +126,7 @@ class AdminEntity implements InputFilterAwareInterface
 			)));
 
 			$inputFilter->add($factory->createInput(array(
-					'name'     => 'lastname',
+					'name'     => 'last_name',
 					'required' => true,
 					'filters'  => array(
 							array('name' => 'StripTags'),
