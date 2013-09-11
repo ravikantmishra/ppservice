@@ -11,7 +11,8 @@ return array(
         'Manager',
         'Info',
         'Communicate',
-        'User'
+        'User',
+    	'Passport'
         ),
     'module_listener_options' => array(
         'module_paths' => array(

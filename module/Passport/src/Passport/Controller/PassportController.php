@@ -224,4 +224,8 @@ class PassportController extends AbstractActionController {
 		
 	}
 	
+	public function knowyourstatusAction() {
+		
+	}
+	
 }
