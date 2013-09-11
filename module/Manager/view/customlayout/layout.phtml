@@ -11,6 +11,7 @@ use Zend\Session\Container;
                         ->prependStylesheet($this->basePath() . '/css/style.css')
                         ->prependStylesheet($this->basePath() . '/css/main.css')
                         ->prependStylesheet($this->basePath() . '/css/global.css')	
+                        
          ?>
         <!-- Js Scripts -->
         <?php echo $this->headScript()
@@ -29,6 +30,7 @@ use Zend\Session\Container;
 			
 	<div width="25%" class="active" style="vertical-align:text-top; border-color:#000; float:left;">
 	<?php  echo $this->render('/customlayout/left');  ?>
+	
 	</div>	
 	<div style="height:500px;">
 	<?php echo $this->content;?>

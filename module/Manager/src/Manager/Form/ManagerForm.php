@@ -15,7 +15,7 @@ class ManagerForm extends Form
             ),
         ));
         $this->add(array(
-            'name' => 'username',
+            'name' => 'user_name',
             'attributes' => array(
                 'type'  => 'text',
             	'required'=>'required',

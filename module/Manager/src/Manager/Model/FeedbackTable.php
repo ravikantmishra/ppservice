@@ -17,8 +17,7 @@ use Zend\Db\Sql\Update;
 
 class FeedbackTable
 {
-	
-	
+
 	protected $tableGateway;
 	public function __construct(TableGateway $tableGateway) {
 		$this->tableGateway = $tableGateway;
@@ -68,18 +67,16 @@ class FeedbackTable
 	}
 	
 
+	public function fetchAll(Select $select = null) {
 	
-	public function fetchAll($query = 0)
-	{
-		
-		$resultSet = $this->tableGateway->select(function (Select $select){
-			$select->columns(array('id', 'name', 'email','mobile_number','comment','seen',));
-			$select->order(array('id asc'));
-		});
-		
-	    return $resultSet;
+		if (null === $select)
+			$select = new Select();
+		$data=$select->from($this->tableGateway->table);
+		$resultSet = $this->tableGateway->selectWith($select);
+		$resultSet->buffer();
+		return $resultSet;
 	}
-	
+
 	
 	public function deleteFeedback($id)
 	{

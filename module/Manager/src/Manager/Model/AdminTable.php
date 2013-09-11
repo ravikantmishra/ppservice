@@ -28,11 +28,11 @@ class AdminTable
 		
 		$data = array (
 				'id'=> $userObj->id,
-				'username' => $userObj->username,
+				'user_name' => $userObj->user_name,
 				'password' => md5(utf8_encode($userObj->password)),
 				'email' => $userObj->email,
-				'firstname' => $userObj->firstname,
-				'lastname' => $userObj->lastname,
+				'first_name' => $userObj->first_name,
+				'last_name' => $userObj->last_name,
 				'status' => $userObj->status
 		);
 		
@@ -74,7 +74,7 @@ class AdminTable
 	{
 		
 		$resultSet = $this->tableGateway->select(function (Select $select){
-			$select->columns(array('id', 'firstname', 'lastname','email','username','status',));
+			$select->columns(array('id', 'first_name', 'last_name','email','user_name','status',));
 			$select->order(array('id asc'));
 		});
 		

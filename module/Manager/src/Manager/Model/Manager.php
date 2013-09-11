@@ -15,12 +15,12 @@ class Manager
 {
     
 	public $id;
-    public $username;
+    public $user_name;
     public $password;
     public function exchangeArray($data)
     {
         $this->id     = (isset($data['id'])) ? $data['id'] : null;
-        $this->username = (isset($data['username'])) ? $data['username'] : null;
+        $this->user_name = (isset($data['user_name'])) ? $data['user_name'] : null;
         $this->password  = (isset($data['password'])) ? $data['password'] : null;
     }
     
@@ -50,7 +50,7 @@ class Manager
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'username',
+                'name'     => 'user_name',
                 'required' => true,
                 'filters'  => array(
                     array('name' => 'StripTags'),

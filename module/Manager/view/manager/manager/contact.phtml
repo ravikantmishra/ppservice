@@ -25,10 +25,13 @@ function ActiveData(id,status)
 <?php
 $title = 'Contact User List';
 $this->headTitle($title);
-
+$url_order = 'ASC';
+if ($this->order_by == 'title')
+	$url_order = $this->order == 'ASC' ? 'DESC' : 'ASC';
+elseif ($this->order_by == 'artist')
+$url_order = $this->order == 'ASC' ? 'DESC' : 'ASC';
 ?>
-
- <table width="100%">
+<table width="100%">
 <tr>
 <td style="padding-left:15px;">
 <b><?php echo $title?></b>
@@ -80,6 +83,8 @@ $this->headTitle($title);
 		</td>
 	</tr>
 	<?php 
+	
+	
 	if(count($this->contactlist)>0)
 	{
 	foreach($this->contactlist as $row) : 
@@ -97,7 +102,22 @@ $this->headTitle($title);
        <a href="<?php echo $this->url('manager',array('action'=>'contactlistdelete', 'id' => $row->id));?>" Onclick="return ConfirmDelete();">Delete</a>
        </td>
     </tr>
+  
     <?php endforeach; 
+    ?>
+     <tr>
+    <td align="center" colspan="6">
+   
+  <?php
+
+    echo $this->paginationControl(
+            $this->contactlist, 'Sliding', 'manager-paginator-slide', array('route' => 'manager/contact','order_by' => $this->order_by, 'order' => $this->order,'slug' => 'contact')
+    );
+   ?>
+
+    </td>
+    </tr>
+    <?php 
 	}
 	else 
 	{
@@ -111,6 +131,7 @@ $this->headTitle($title);
 		
 	}
     ?>
+   
     
 </table>
 

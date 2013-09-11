@@ -102,7 +102,23 @@ $this->headTitle($title);
     
     
     <?php
-    endforeach;
+    endforeach; ?>
+    
+    <tr>
+    <td align="center" colspan="6">
+   
+  <?php
+
+    echo $this->paginationControl(
+            $this->listuser, 'Sliding', 'register-paginator-slide', array('route' => 'manager/register','order_by' => $this->order_by, 'order' => $this->order,'slug' => 'register')
+    );
+   ?>
+
+    </td>
+    </tr>
+    
+    
+    <?php 
 	}
 	else 
 	{

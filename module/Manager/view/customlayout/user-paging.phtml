@@ -1,0 +1,25 @@
+<?php if ($this->pageCount): ?>
+    <div class="pagination pagination-centered">
+        <ul>
+            <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
+                <a href="<?php echo $this->url('manager', array('action'=>'register','page' => $this->first, 'order_by' => $this->order_by, 'order' => $this->order,)); ?>">&laquo;</a></li>
+            <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
+                <a href="<?php echo $this->url('manager', array('action'=>'register','page' => $this->previous, 'order_by' => $this->order_by, 'order' => $this->order,)); ?>">&lsaquo;</a></li>
+
+
+            <!-- Numbered page links -->
+            <?php foreach ($this->pagesInRange as $this->page): ?>
+                <li <?php echo $this->page == $this->current ? 'class="active"' : ''; ?>><a href="<?php echo $this->url('manager', array('action'=>'register','page' => $this->page, 'order_by' => $this->order_by, 'order' => $this->order,)); ?>">
+                        <?php echo $this->page; ?>
+                    </a></li>
+            <?php endforeach; ?>
+
+            <!-- Next page link -->
+            <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>>
+                <a href="<?php echo $this->url('manager', array('action'=>'register','page' => $this->next, 'order_by' => $this->order_by, 'order' => $this->order,)); ?>">&rsaquo;</a></li>
+            <!-- Last page link -->
+            <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>>
+                <a href="<?php echo $this->url('manager', array('action'=>'register', 'page' => $this->last, 'order_by' => $this->order_by, 'order' => $this->order,)); ?>">&raquo;</a></li>
+        </ul>
+    </div>
+<?php endif; ?>
