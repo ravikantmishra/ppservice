@@ -23,7 +23,9 @@ class ApplyForm extends Form
 				'type' => 'Zend\Form\Element\Select',
 				'attributes' => array(
 						'type' => 'select',
-						'value'=>0,
+						'id' => 'application_type',
+						'value'=> '0',
+						'onChange' => 'checkApplicationType(this.value);',
 				),
 				'name' => 'application_type',
 				'options' => array(
@@ -40,7 +42,9 @@ class ApplyForm extends Form
 				'type' => 'Zend\Form\Element\Select',
 				'attributes' => array(
 						'type' => 'select',
-						'value'=>0,
+						'id' => 'country',
+						'value'=> '0',
+						'onChange' => 'checkCountry(this.value);',
 				),
 				'name' => 'country',
 				'options' => array(
@@ -50,7 +54,7 @@ class ApplyForm extends Form
 		));				
 		
 		$this->add(array(
-				'name' => 'submit',
+				'name' => 'btnSubmit',
 				'attributes' => array(
 						'type'  => 'submit',
 						'value' => 'Go',

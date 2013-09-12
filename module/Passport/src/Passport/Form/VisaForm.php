@@ -2,14 +2,14 @@
 /*
  * Organization: OSSCube
 * Added: Ramandeep Singh
-* Scope: Passport form for client side validation
-* Dated: 10-09-2013
+* Scope: Visa form for client side validation
+* Dated: 11-09-2013
 */
 namespace Passport\Form;
 
 use Zend\Form\Form;
 
-class PassportForm extends Form
+class VisaForm extends Form
 {
 	public function __construct($name = null)
 	{
@@ -141,6 +141,18 @@ class PassportForm extends Form
 				),
 				'options' => array(
 						'label' => 'State',
+				),
+		));
+		
+		$this->add(array(
+				'name' => 'passport_number',
+				'attributes' => array(
+						'type'  => 'text',
+						'required' => 'required',
+						'id' => 'state',
+				),
+				'options' => array(
+						'label' => 'Passport Number',
 				),
 		));
 		

@@ -8,7 +8,7 @@
 			<div class="heading_container">
 				<div class="heading_container_left"></div>
 				<div class="heading_containerbg">
-					<div class="page_heading">Passport Form</div>
+					<div class="page_heading">Visa Form</div>
 				</div>
 				<div class="heading_container_right"></div>
 			</div>
@@ -18,9 +18,9 @@
 				<div class="bodyContent">
 					<div class="dlForm multiForm">
                     <?php
-																				$form = $this->passportForm;
+																				$form = $this->visaForm;
 																				$form->prepare ();
-																				$form->setAttribute ( 'action', $this->url ( 'savepassport' ) );
+																				$form->setAttribute ( 'action', $this->url ( 'savevisa' ) );
 																				echo $this->form ()->openTag ( $form );
 																				?>
             <div>
@@ -347,6 +347,20 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 									</dt>
 									<dd>
                    <?php echo $this->formSelect($form->get('country')); ?>             <br>
+										<span class="error_msg"> </span>
+									</dd>
+								</dl>
+								<dl>
+									<dt><?php
+											$name = $form->get ( 'passport_number' );
+											echo $this->formLabel()->openTag($name) . $name->getLabel();
+											?>
+											<span class="red">*</span>
+											<?php $this->formLabel()->closeTag();
+											?>
+									</dt>
+									<dd>
+                  <?php echo $this->formInput($form->get('passport_number')); ?>                  <br>
 										<span class="error_msg"> </span>
 									</dd>
 								</dl>
