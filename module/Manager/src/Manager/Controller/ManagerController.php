@@ -5,6 +5,7 @@
  * Dated: 03/09/2013
  * */
 namespace Manager\Controller;
+use Zend\CustomLibrary\AbstractController;
 use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -39,6 +40,7 @@ class ManagerController extends AbstractActionController
 	protected $storage;
 	protected $authservice;
 	public $viewmodel;
+	public $templateTable;
 
 	
 	public function getAuthService()
@@ -609,5 +611,202 @@ class ManagerController extends AbstractActionController
         }
         return $this->redirect()->toRoute('manager');
     }
+    
+    // added after 10-9-2013 email template work
+    
+    public function getTemplateTable()
+    {
+    	if (!$this->templateTable) {
+    		$this->templateTable = $this->getServiceLocator ()->get ( 'Manager\Model\TemplateTable' );
+    	}
+    	return $this->templateTable;
+    }
+    
+    // function for template
+    public function templatesAction()
+    {
+    	$tamplateArray = $this->getTemplateTable()->getAllTemplates();
+    	
+    	$flashMessages = $this->flashMessenger()->getCurrentMessages();
+    	$this->flashMessenger()->clearCurrentMessages();
+    	$this->flashMessenger()->clearMessages();
+    	
+    	return (array('templateArray' => $tamplateArray,
+    					'flashMessage' => $flashMessages,
+    			));
+    }
+    
+    public function addtemplateAction()
+    {
+    	$newTemplateForm = $this->getServiceLocator ()->get ( 'new_template_form' );
+    	
+    	$flashMessages = $this->flashMessenger()->getCurrentMessages();
+    	$this->flashMessenger()->clearCurrentMessages();
+    	$this->flashMessenger()->clearMessages();
+    	
+    	return new ViewModel(array('newTemplate' => $newTemplateForm,
+    								'flashMessage' =>$flashMessages,
+    					));
+    }
+    
+    public function edittemplateAction()
+    {
+    	$id = $this->params()->fromRoute('id');
+    	
+    	$editTemplateForm = $this->getServiceLocator()->get('edit_template_form');
+    	$resultVal = $this->getTemplateTable()->getAllTemplates($id);
+    	$editTemplateForm->setData(array('id' => $resultVal[0]['id'],
+    									'templateBody' => html_entity_decode($resultVal[0]['template_data']),
+    									'templateName' => $resultVal[0]['template_name'],
+    									'templateSubject' => $resultVal[0]['template_subject'],
+    								));
+    	
+    	$flashMessages = $this->flashMessenger()->getCurrentMessages();
+    	$this->flashMessenger()->clearCurrentMessages();
+    	$this->flashMessenger()->clearMessages();
+    	
+    	return new ViewModel(array('editTemplate' => $editTemplateForm,
+    								'flashMessage' =>$flashMessages,
+    					));
 
+    }
+    
+    public function updateTemplateAction()
+    {
+    	$id = $this->params()->fromPost('id');
+    	$editTemplateForm = $this->getServiceLocator()->get('edit_template_form');
+    	$request = $this->getRequest ();
+    	$response = $this->getResponse ();
+    	if ($request->isPost ())
+    	{
+    		$templateEntity = new \Manager\Model\Entity\TemplateEntity();
+    		$editTemplateForm->setInputFilter($templateEntity->getInputFilter());
+    		$editTemplateForm->setData ( $request->getPost () );
+    	
+    		if ($editTemplateForm->isValid ())
+    		{
+    			$templateEntity->exchangeArray ( $editTemplateForm->getData () );
+    			if($this->getTemplateTable()->updateTemplate($templateEntity))
+    			{
+    				$this->redirect()->toRoute('manager',array('action' => 'templates'));
+    			}
+    			else 
+    			{
+    				$this->redirect()->toRoute('manager',array('action' => 'templates'));
+    			}
+    		}
+    		else
+    		{
+    			$message = "No field should left empty. Please Fill Valid data in all fields"; 
+				$this->flashMessenger()->addMessage($message);
+				return $this->redirect()->toRoute('manager' , array('action' =>'edittemplate','id' => $id));
+    		}
+	    }
+		else 
+		{
+			$message = "Not a valid Request";
+			$this->flashMessenger()->addMessage($message);
+			return $this->redirect()->toRoute('manager',array('action' => 'templates'));
+		}
+	}
+	
+	public function saveTemplateAction()
+	{
+		$newTemplateForm = $this->getServiceLocator ()->get ( 'new_template_form' );
+		$request = $this->getRequest ();
+		$response = $this->getResponse ();
+		if ($request->isPost ())
+		{
+			$templateEntity = new \Manager\Model\Entity\TemplateEntity();
+			$newTemplateForm->setInputFilter($templateEntity->getInputFilter());
+			$newTemplateForm->setData ( $request->getPost () );
+			 
+			if ($newTemplateForm->isValid ())
+			{
+				$templateEntity->exchangeArray ( $newTemplateForm->getData () );
+				if($this->getTemplateTable()->saveTemplate($templateEntity))
+				{
+					$this->redirect()->toRoute('manager',array('action' => 'templates'));
+				}
+				else
+				{
+					$this->redirect()->toRoute('manager',array('action' => 'templates'));
+				}
+			}
+			else
+			{
+				$message = "No field should left empty. Please Fill Valid data in all fields"; 
+				$this->flashMessenger()->addMessage($message);
+				return $this->redirect()->toRoute('manager' , array('action' =>'addtemplate'));
+			}
+		}
+		else
+		{
+			$message = "Not a valid Request";
+			$this->flashMessenger()->addMessage($message);	
+		}
+	}
+	
+	public function templateExistAction()
+	{
+		$templateName = $this->params()->fromPost('templateName');	
+		$result = $this->getTemplateTable()->isTemplateExist($templateName);
+		$response = $this->getResponse();
+		if($result == "true")
+		{
+			$response->setContent( \Zend\Json\Json::encode ( array (
+								'response' => true,
+								'result' => 'Template Already Exist'
+						) ) );
+			return $response;
+		}
+		else 
+		{
+			$response->setContent( \Zend\Json\Json::encode ( array (
+					'response' => false,
+			) ) );
+			return $response;
+		}
+	}
+	
+	public function templateMailAction()
+	{
+		
+		die(\Zend\CustomLibrary\CustomTemplateMail::templateMail(
+				$templateName ="Sign Up", $sendTo ="user", 
+				$placeholderDetails = array('#userName#' => 'abcd', '#email#' => 'user@user.com'),
+				$this->getTemplateTable()
+		));
+	}	
+	
+/*	public function templateMailAction($templateName ="Sign Up", $sendTo ="user", $placeholderDetails = array('#userName#' => 'abcd', '#email#' => 'user@user.com'))
+	{
+		if(isset($templateName) && !empty($templateName))
+		{
+			if(isset($sendTo) && !empty($sendTo))
+			{
+				$template =$this->getTemplateTable()->getTemplateByName($templateName);
+				if($template)
+				{
+					foreach($placeholderDetails as $key => $value)
+					{
+						$template[1]  = str_replace($key, $value, $template[1]);
+					}
+				}
+				else
+				{
+					return ("template name provided does not exist");
+				}
+			}
+			else
+			{
+				return ( "Please provide email at which you want to send the mail");
+			}
+		}
+		else
+		{
+			return ( "Please Provide template name which you want to use");
+		}
+		echo html_entity_decode($template[1]); die;
+	} */
 }

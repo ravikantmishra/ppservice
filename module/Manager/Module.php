@@ -119,8 +119,22 @@ class Module implements AutoloaderProviderInterface {
 							$resultSetPrototype = new ResultSet();
 							$resultSetPrototype->setArrayObjectPrototype(new RegisterEntity());
 							return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
-						}	
-						
+						},	
+						'Manager\Model\TemplateTable' => function($sm) {
+							$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+							$table = new Model\TemplateTable($dbAdapter);
+							return $table;
+						},
+						'edit_template_form' => function ($sm) {
+							$form = new Form\EditTemplateForm ();
+							$form->setHydrator ( new ClassMethods () );
+							return $form;
+						},
+						'new_template_form' => function ($sm) {
+							$form = new Form\NewTemplateForm ();
+							$form->setHydrator ( new ClassMethods () );
+							return $form;
+						},
 						
 						
 						
