@@ -23,7 +23,7 @@ return array(
 						'manager' => array(
 								'type' => 'segment',
 								'options' => array(
-										'route'    => '/manager[/:action][/page/:page][/:id][/order_by/:order_by][/:order]',
+										'route'    => '/manager[/:action][/page/:page][/:id][/:status][/order_by/:order_by][/:order]',
 										'constraints' => array(
 												'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
 												'id'     => '[0-9]+',
@@ -55,7 +55,7 @@ return array(
 										'may_terminate' => true,
 										'child_routes' => array(
 								// Segment route for viewing one feedback post
-										'post' => array(
+										'feedback' => array(
 												'type' => 'segment',
 												'options' => array(
 														'route'    => '/feedback[/:action][/page/:page][/:id][/order_by/:order_by][/:order]',
@@ -73,7 +73,7 @@ return array(
 												)
 										),
 										// Literal route for viewing register 
-										'rss' => array(
+										'register' => array(
 												'type' => 'segment',
 												'options' => array(
 														'route'    => '/register[/:action][/page/:page][/:id][/order_by/:order_by][/:order]',
@@ -89,12 +89,16 @@ return array(
 															'action' => 'register'
 														)
 												)
-										) 
+										)
+												
 								) 
 						),
 				),
+				
+				
+				
+				
 		),
-		
 		
 		'view_manager' => array(
 				'template_path_stack' => array(

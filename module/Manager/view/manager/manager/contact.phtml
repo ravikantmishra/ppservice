@@ -44,11 +44,11 @@ $url_order = $this->order == 'ASC' ? 'DESC' : 'ASC';
 	<tr>
 		<td>
 		<?php 
-			if(isset($flashMessage) && !empty($flashMessage)) 
+			if(isset($Message) && !empty($Message)) 
 			{
 			?>
 		    	<?php 
-		    	foreach ($flashMessage as $msg)
+		    	foreach ($Message as $msg)
 		    	{
 		    	?>
 			  <div><?php echo $msg; ?></div>
