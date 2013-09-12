@@ -34,14 +34,14 @@ DROP TABLE IF EXISTS `admin`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `firstname` varchar(40) NOT NULL,
-  `lastname` varchar(30) NOT NULL,
+  `first_name` varchar(40) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
   `email` varchar(100) NOT NULL,
   `status` enum('0','1') NOT NULL,
-  `username` varchar(150) NOT NULL,
+  `user_name` varchar(150) NOT NULL,
   `password` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,6 +50,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` VALUES (1,'admin','admin','admin@gmail.com','1','admin','21232f297a57a5a743894a0e4a801fc3');
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,7 +68,7 @@ CREATE TABLE `application` (
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `gender` enum('male','female','other') NOT NULL,
-  `date_of_birth` date NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
   `address1` varchar(255) NOT NULL,
   `address2` varchar(255) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
@@ -81,10 +82,11 @@ CREATE TABLE `application` (
   `status` enum('paid','unpaid') NOT NULL DEFAULT 'unpaid',
   `passport_number` varchar(15) DEFAULT NULL,
   `order_number` varchar(20) DEFAULT NULL,
+  `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `country_id` (`country_id`),
   CONSTRAINT `application_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +95,7 @@ CREATE TABLE `application` (
 
 LOCK TABLES `application` WRITE;
 /*!40000 ALTER TABLE `application` DISABLE KEYS */;
-INSERT INTO `application` VALUES (1,'Passport','MR','aa','','male','0000-00-00','aa','','aa@asmail.com','','aa',1,NULL,NULL,'passport',NULL,'unpaid',NULL,NULL),(2,'Passport','MR','aa','','male','0000-00-00','aa','','aa@asmail.com','','aa',1,NULL,NULL,'passport',NULL,'unpaid',NULL,NULL),(3,'Visa','MR','qq','qq','male','0000-00-00','qq','qq','qq@qq.com','','qq',1,NULL,NULL,'passport',NULL,'unpaid','qq',NULL);
+INSERT INTO `application` VALUES (1,'Passport','MR','raman','','male','1989-06-01','my address','','qq@qq.com','','new delhi',1,NULL,NULL,'passport',NULL,'unpaid',NULL,NULL,'2013-09-12 05:36:55'),(2,'Visa','MR','kiran','aa','female',NULL,'address','sddress12','kiran@gmail.com','','delhi',1,NULL,NULL,'passport',NULL,'unpaid','1234567898',NULL,'2013-09-12 06:05:10');
 /*!40000 ALTER TABLE `application` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,11 +188,13 @@ DROP TABLE IF EXISTS `template`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `template` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `template_name` varchar(50) NOT NULL,
+  `template_name` varchar(25) NOT NULL,
+  `template_subject` varchar(50) NOT NULL,
   `template_data` longtext,
-  `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_on` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  `created_on` datetime NOT NULL,
+  `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `template_name` (`template_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -200,7 +204,7 @@ CREATE TABLE `template` (
 
 LOCK TABLES `template` WRITE;
 /*!40000 ALTER TABLE `template` DISABLE KEYS */;
-INSERT INTO `template` VALUES (1,'signup','Thank you <strong>{username}</strong> for signing up with email <strong>{email}</strong>\n \nThe Admin','0000-00-00 00:00:00','0000-00-00 00:00:00'),(2,'forget Password','Hi <strong>{username}</strong> your password is succesfully sended to your email <strong>{email}</strong>\n \nThe Admin','2013-09-10 03:22:13','0000-00-00 00:00:00');
+INSERT INTO `template` VALUES (1,'Sign Up','Welcoem Note','&lt;p&gt;&lt;img alt=&quot;yes&quot; src=&quot;http://www.pass.localhost/js/ckeditor/plugins/smiley/images/thumbs_up.gif&quot; style=&quot;height:20px; width:20px&quot; title=&quot;yes&quot; /&gt;#password##userName#&lt;/p&gt;\r\n\r\n&lt;p&gt;#email#&lt;/p&gt;\r\n\r\n&lt;p&gt;#email#&lt;/p&gt;','2013-09-12 16:47:04','2013-09-12 11:36:01'),(2,'Forget Password','Password Recovery','&lt;p&gt;&lt;img alt=&quot;yes&quot; src=&quot;http://www.pass.localhost/js/ckeditor/plugins/smiley/images/thumbs_up.gif&quot; style=&quot;height:20px; width:20px&quot; title=&quot;yes&quot; /&gt;#url# #password#&lt;/p&gt;\r\n\r\n&lt;p&gt;#userName# #email#&lt;/p&gt;','2013-09-12 16:49:23','2013-09-12 11:36:21');
 /*!40000 ALTER TABLE `template` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -245,4 +249,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-09-11 17:42:10
+-- Dump completed on 2013-09-12 17:09:04

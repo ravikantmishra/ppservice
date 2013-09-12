@@ -27,6 +27,7 @@ use Manager\Model\Entity\RegisterEntity;
 use Zend\Db\Sql\Select;
 use Zend\Paginator\Paginator;
 use Zend\Paginator\Adapter\Iterator as paginatorIterator;
+use Zend\CustomLibrary\CustomTemplateMail;
 
 
 class ManagerController extends AbstractActionController
@@ -771,42 +772,10 @@ class ManagerController extends AbstractActionController
 	
 	public function templateMailAction()
 	{
-		
-		die(\Zend\CustomLibrary\CustomTemplateMail::templateMail(
-				$templateName ="Sign Up", $sendTo ="user", 
-				$placeholderDetails = array('#userName#' => 'abcd', '#email#' => 'user@user.com'),
-				$this->getTemplateTable()
-		));
-	}	
-	
-/*	public function templateMailAction($templateName ="Sign Up", $sendTo ="user", $placeholderDetails = array('#userName#' => 'abcd', '#email#' => 'user@user.com'))
-	{
-		if(isset($templateName) && !empty($templateName))
-		{
-			if(isset($sendTo) && !empty($sendTo))
-			{
-				$template =$this->getTemplateTable()->getTemplateByName($templateName);
-				if($template)
-				{
-					foreach($placeholderDetails as $key => $value)
-					{
-						$template[1]  = str_replace($key, $value, $template[1]);
-					}
-				}
-				else
-				{
-					return ("template name provided does not exist");
-				}
-			}
-			else
-			{
-				return ( "Please provide email at which you want to send the mail");
-			}
-		}
-		else
-		{
-			return ( "Please Provide template name which you want to use");
-		}
-		echo html_entity_decode($template[1]); die;
-	} */
+		$resultArray = CustomTemplateMail::templateMail(
+					$templateName ="Forget Password", $sendTo ="user", 
+					$placeholderDetails = array('#userName#' => 'abcd', '#email#' => 'user@user.com')
+				);
+		print_r($resultArray); die;
+	}
 }
