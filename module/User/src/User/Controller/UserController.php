@@ -63,7 +63,7 @@ class UserController extends AbstractActionController {
 						$container = new Container('SiteLink');
 						$data= $container->LastVisitPage;						
 						if($data){
-							return  $this->redirect()->toRoute('apply');
+							return  $this->redirect()->toRoute($data);
 						}
 						return  $this->redirect()->toRoute('home');
 					}
@@ -124,6 +124,7 @@ class UserController extends AbstractActionController {
 	public function logoutAction() {		
 		SESSION_START();
 		UNSET($_SESSION['user']);
+		UNSET($_SESSION['SiteLink']);
 		return $this->redirect()->toRoute('home');
 	}
 	

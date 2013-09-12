@@ -1,3 +1,40 @@
+<?php
+$form = $this->visaForm;
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if($flashMessage[1]['title']){
+													$form->get ( 'title' )->setValue($flashMessage[1]['title']);
+												}
+												if($flashMessage[1]['first_name']){
+													$form->get ( 'first_name' )->setValue($flashMessage[1]['first_name']);
+												}
+												if($flashMessage[1]['last_name']){
+													$form->get ( 'last_name' )->setValue($flashMessage[1]['last_name']);
+												}
+												if($flashMessage[1]['gender']){
+													$form->get ( 'gender' )->setValue($flashMessage[1]['gender']);
+												}
+												if($flashMessage[1]['address1']){
+													$form->get ( 'address1' )->setValue($flashMessage[1]['address1']);
+												}
+												if($flashMessage[1]['address2']){
+													$form->get ( 'address2' )->setValue($flashMessage[1]['address2']);
+												}
+												if($flashMessage[1]['email']){
+													$form->get ( 'email' )->setValue($flashMessage[1]['email']);
+												}
+												if($flashMessage[1]['state']){
+													$form->get ( 'state' )->setValue($flashMessage[1]['state']);
+												}
+												if($flashMessage[1]['country']){
+													$form->get ( 'country' )->setValue($flashMessage[1]['country']);
+												}
+												if($flashMessage[1]['passport_number']){
+													$form->get ( 'passport_number' )->setValue($flashMessage[1]['passport_number']);
+												}
+											}											
+										?>
+
 <div class="clear"></div>
 <div class="wrapper">
 	<div class="clear">&nbsp;</div>
@@ -18,11 +55,12 @@
 				<div class="bodyContent">
 					<div class="dlForm multiForm">
                     <?php
-																				$form = $this->visaForm;
-																				$form->prepare ();
-																				$form->setAttribute ( 'action', $this->url ( 'savevisa' ) );
-																				echo $this->form ()->openTag ( $form );
-																				?>
+																
+						$form->prepare ();
+						$form->setAttribute ( 'action', $this->url ( 'savevisa' ) );
+						$form->setAttribute('onsubmit', 'return fncSubmit()');
+						echo $this->form ()->openTag ( $form );
+					?>
             <div>
 							<!--Fieldset Section Starts Here-->
 
@@ -48,7 +86,18 @@
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('first_name')); ?>                 <br>
-										<span class="error_msg"> </span>
+										<span class="error_msg"> 
+										
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['first_name']){
+														echo "First Name is Required";
+														}
+											}											
+										?>
+										
+										</span>
 									</dd>
 								</dl>
 								<dl>
@@ -286,7 +335,7 @@ onSelect : wfd_passport_application_date_of_birth_update_linked
  });
 jQuery("#passport_application_date_of_birth_month, #passport_application_date_of_birth_day, #passport_application_date_of_birth_year").change(wfd_passport_application_date_of_birth_update_from_linked_days);
 </script>
-										<br> <span class="error_msg"> </span>
+										<br> <span id="dateMgs" class="error_msg"> </span>
 									</dd>
 								</dl>
 								<dl>
@@ -300,7 +349,18 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('address1')); ?>                  <br>
-										<span class="error_msg"> </span>
+										<span class="error_msg">
+										
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['address1']){
+														echo "Address 1 is Required";
+														}
+											}											
+										?>
+										
+										 </span>
 									</dd>
 								</dl>
 								<dl>
@@ -324,7 +384,16 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('email')); ?>                 <br>
-										<span class="error_msg"> </span>
+										<span id="emailMgs" class="error_msg">
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['email']){
+														echo "Email is Required";
+														}
+											}											
+										?>
+										 </span>
 									</dd>
 								</dl>
 								<dl>
@@ -338,7 +407,17 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('state')); ?>                  <br>
-										<span class="error_msg"> </span>
+										<span class="error_msg">
+										
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['state']){
+														echo "State is Required";
+														}
+											}											
+										?>
+										 </span>
 									</dd>
 								</dl>
 								<dl>
@@ -361,7 +440,17 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('passport_number')); ?>                  <br>
-										<span class="error_msg"> </span>
+										<span class="error_msg">
+										
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['passport_number']){
+														echo "Passport Number is Required";
+														}
+											}											
+										?>
+										 </span>
 									</dd>
 								</dl>
 							</fieldset>
@@ -406,3 +495,29 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 	<!--Main Container Section Ends Here-->
 </div>
 <div class="clear"></div>
+<script>
+
+
+	function checkEmail(email){
+	    var email = $('#email').val();
+	    
+	    var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+	    if (reg.test(email)){
+	    	$('#emailMgs').html(""); 
+	    return true; 
+	   }
+	    else{
+	    	$('#emailMgs').html("Please provide a valid email");    	
+			$('#email').val('');
+	    return false;
+	    } 
+	
+	}
+	function fncSubmit() {
+		if( $('#passport_application_date_of_birth_day').val() == "" || $('#passport_application_date_of_birth_month').val() == "" || $('#passport_application_date_of_birth_year').val() == "" ) {
+			$('#dateMgs').html("Date of birth is required.");
+			return false;
+		}
+	}
+
+</script>

@@ -63,6 +63,16 @@ return array(
 										),
 								),
 						),
+						'knowyourstatus' => array(
+								'type'    => 'segment',
+								'options' => array(
+										'route'    => '/knowyourstatus',
+										'defaults' => array(
+												'controller' => 'Passport\Controller\Passport',
+												'action'     => 'knowyourstatus',
+										),
+								),
+						),
 				),
 		),
 		

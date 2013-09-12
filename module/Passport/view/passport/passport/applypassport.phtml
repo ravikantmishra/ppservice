@@ -1,3 +1,36 @@
+<?php
+$form = $this->passportForm;
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if($flashMessage[1]['title']){
+													$form->get ( 'title' )->setValue($flashMessage[1]['title']);
+												}
+												if($flashMessage[1]['first_name']){
+													$form->get ( 'first_name' )->setValue($flashMessage[1]['first_name']);
+												}
+												if($flashMessage[1]['last_name']){
+													$form->get ( 'last_name' )->setValue($flashMessage[1]['last_name']);
+												}
+												if($flashMessage[1]['gender']){
+													$form->get ( 'gender' )->setValue($flashMessage[1]['gender']);
+												}
+												if($flashMessage[1]['address1']){
+													$form->get ( 'address1' )->setValue($flashMessage[1]['address1']);
+												}
+												if($flashMessage[1]['address2']){
+													$form->get ( 'address2' )->setValue($flashMessage[1]['address2']);
+												}
+												if($flashMessage[1]['email']){
+													$form->get ( 'email' )->setValue($flashMessage[1]['email']);
+												}
+												if($flashMessage[1]['state']){
+													$form->get ( 'state' )->setValue($flashMessage[1]['state']);
+												}
+												if($flashMessage[1]['country']){
+													$form->get ( 'country' )->setValue($flashMessage[1]['country']);
+												}
+											}											
+										?>
 <div class="clear"></div>
 <div class="wrapper">
 	<div class="clear">&nbsp;</div>
@@ -18,10 +51,14 @@
 				<div class="bodyContent">
 					<div class="dlForm multiForm">
                     <?php
-																				$form = $this->passportForm;
+// 																				$form = $this->passportForm;
 																				$form->prepare ();
 																				$form->setAttribute ( 'action', $this->url ( 'savepassport' ) );
 																				echo $this->form ()->openTag ( $form );
+																				$this->headScript ()->appendFile ($this->basePath() . '/js/calendar.js');
+																				$this->headScript ()->appendFile ($this->basePath() . '/js/calendar-en.js');
+																				$this->headScript ()->appendFile ($this->basePath() . '/js/calendar-setup.js');
+																				$this->headScript ()->appendFile ( $this->basePath() . '/css/datePicker.css' );
 																				?>
             <div>
 							<!--Fieldset Section Starts Here-->
@@ -39,16 +76,29 @@
 								</dl>
 								<dl>
 									<dt><?php
-											$name = $form->get ( 'first_name' );
-											echo $this->formLabel()->openTag($name) . $name->getLabel();
-											?>
+									$name = $form->get ( 'first_name' );
+									echo $this->formLabel ()->openTag ( $name ) . $name->getLabel ();
+									?>
 											<span class="red">*</span>
-											<?php $this->formLabel()->closeTag();
+											<?php
+											
+											$this->formLabel ()->closeTag ();
 											?>
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('first_name')); ?>                 <br>
-										<span class="error_msg"> </span>
+										<span class="error_msg"> 
+										
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['first_name']){
+														echo "First Name is Required";
+														}
+											}											
+										?>
+										
+										</span>
 									</dd>
 								</dl>
 								<dl>
@@ -75,7 +125,7 @@
 										</label>
 									</dt>
 									<dd id="db_width">
-										<select name="passport_application[date_of_birth][day]"
+										<select name="date_of_birth[passport_application][day]"
 											id="passport_application_date_of_birth_day">
 											<option value="" selected="selected"></option>
 											<option value="1">01</option>
@@ -110,7 +160,7 @@
 											<option value="30">30</option>
 											<option value="31">31</option>
 										</select>/<select
-											name="passport_application[date_of_birth][month]"
+											name="date_of_birth[passport_application][month]"
 											id="passport_application_date_of_birth_month">
 											<option value="" selected="selected"></option>
 											<option value="1">01</option>
@@ -126,7 +176,7 @@
 											<option value="11">11</option>
 											<option value="12">12</option>
 										</select>/<select
-											name="passport_application[date_of_birth][year]"
+											name="date_of_birth[passport_application][year]"
 											id="passport_application_date_of_birth_year">
 											<option value="" selected="selected"></option>
 											<option value="1914">1914</option>
@@ -291,16 +341,29 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 								</dl>
 								<dl>
 									<dt><?php
-											$name = $form->get ( 'address1' );
-											echo $this->formLabel()->openTag($name) . $name->getLabel();
-											?>
+									$name = $form->get ( 'address1' );
+									echo $this->formLabel ()->openTag ( $name ) . $name->getLabel ();
+									?>
 											<span class="red">*</span>
-											<?php $this->formLabel()->closeTag();
+											<?php
+											
+$this->formLabel ()->closeTag ();
 											?>
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('address1')); ?>                  <br>
-										<span class="error_msg"> </span>
+										<span class="error_msg">
+										
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['address1']){
+														echo "Address 1 is Required";
+														}
+											}											
+										?>
+										
+										 </span>
 									</dd>
 								</dl>
 								<dl>
@@ -314,31 +377,54 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 								</dl>
 								<dl>
 									<dt><?php
-											$name = $form->get ( 'email' );
-											echo $this->formLabel()->openTag($name) . $name->getLabel();
-											?>
+									$name = $form->get ( 'email' );
+									echo $this->formLabel ()->openTag ( $name ) . $name->getLabel ();
+									?>
 											<span class="red">*</span>
-											<?php $this->formLabel()->closeTag();
+											<?php
+											
+$this->formLabel ()->closeTag ();
 											?>
 									
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('email')); ?>                 <br>
-										<span class="error_msg"> </span>
+										<span id="emailMgs" class="error_msg">
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['email']){
+														echo "Email is Required";
+														}
+											}											
+										?>
+										 </span>
 									</dd>
 								</dl>
 								<dl>
 									<dt><?php
-											$name = $form->get ( 'state' );
-											echo $this->formLabel()->openTag($name) . $name->getLabel();
-											?>
+									$name = $form->get ( 'state' );
+									echo $this->formLabel ()->openTag ( $name ) . $name->getLabel ();
+									?>
 											<span class="red">*</span>
-											<?php $this->formLabel()->closeTag();
+											<?php
+											
+$this->formLabel ()->closeTag ();
 											?>
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('state')); ?>                  <br>
-										<span class="error_msg"> </span>
+										<span class="error_msg">
+										
+										 <?php
+											if(isset($flashMessage) && !empty($flashMessage))
+											{
+												if( $flashMessage[0]['state']){
+														echo "State is Required";
+														}
+											}											
+										?>
+										 </span>
 									</dd>
 								</dl>
 								<dl>
@@ -392,3 +478,21 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 	<!--Main Container Section Ends Here-->
 </div>
 <div class="clear"></div>
+<script>
+	function checkEmail(email){
+	    var email = $('#email').val();
+	    
+	    var reg = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+	    if (reg.test(email)){
+	    	$('#emailMgs').html("");
+	    return true; 
+	   }
+	    else{
+	    	$('#emailMgs').html("Please provide a valid email");    	
+			$('#email').val('');
+	    return false;
+	    } 
+	
+	}
+
+</script>

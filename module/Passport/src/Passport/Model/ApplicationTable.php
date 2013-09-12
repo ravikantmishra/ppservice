@@ -22,9 +22,12 @@ class ApplicationTable {
 	
 	public function saveApplication($data){
 
-		$data['date_of_birth']="01-01-1989";
-		$aa = $this->tableGateway->insert ( $data );
+		$this->tableGateway->insert ( $data );
 		$lastId =  $this->tableGateway->lastInsertValue;
 		return $lastId;
+	}
+	
+	public function fetchApplication($where = null) {
+		return $this->tableGateway->select($where);
 	}
 }
