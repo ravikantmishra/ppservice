@@ -29,6 +29,8 @@ class ApplicationEntity implements InputFilterAwareInterface {
 	public $payment;
 	public $passport_number;
 	public $order_number;
+	public $status;
+	public $created_date;
 	protected $inputFilter;
 	
 	public function exchangeArray($data) {
@@ -50,6 +52,9 @@ class ApplicationEntity implements InputFilterAwareInterface {
 		$this->amount = (isset ( $data ['amount'] )) ? $data ['amount'] : null;
 		$this->payment = (isset ( $data ['payment'] )) ? $data ['payment'] : null;
 		$this->passport_number = (isset ( $data ['passport_number'] )) ? $data ['passport_number'] : null;
+		$this->order_number = (isset ( $data ['order_number'] )) ? $data ['order_number'] : null;
+		$this->status = (isset ( $data ['status'] )) ? $data ['status'] : null;
+		$this->created_date = (isset ( $data ['created_date'] )) ? $data ['created_date'] : null;
 		$this->order_number = (isset ( $data ['order_number'] )) ? $data ['order_number'] : null;
 	}
 	
