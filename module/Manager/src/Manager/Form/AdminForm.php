@@ -17,7 +17,7 @@ class AdminForm extends Form
 		));
 		
 		$this->add(array(
-				'name' => 'firstname',
+				'name' => 'first_name',
 				'attributes' => array(
 						'type'  => 'text',
 						'required'=>'required',
@@ -29,7 +29,7 @@ class AdminForm extends Form
 		
 		
 		$this->add(array(
-				'name' => 'lastname',
+				'name' => 'last_name',
 				'attributes' => array(
 						'type'  => 'text',
 						'required'=>'required',
@@ -58,7 +58,7 @@ class AdminForm extends Form
 		
 		
 		$this->add(array(
-				'name' => 'username',
+				'name' => 'user_name',
 				'attributes' => array(
 						'type'  => 'text',
 						'required'=>'required',

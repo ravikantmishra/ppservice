@@ -460,6 +460,8 @@ class Form extends Fieldset implements FormInterface
 
         $this->isValid = false;
 
+        
+        
         if (!is_array($this->data) && !is_object($this->object)) {
             throw new Exception\DomainException(sprintf(
                 '%s is unable to validate as there is no data currently set',
@@ -467,6 +469,7 @@ class Form extends Fieldset implements FormInterface
             ));
         }
 
+        
         if (!is_array($this->data)) {
             $data = $this->extract();
             if (!is_array($data)) {
@@ -477,7 +480,7 @@ class Form extends Fieldset implements FormInterface
             }
             $this->data = $data;
         }
-
+        
         $filter = $this->getInputFilter();
         if (!$filter instanceof InputFilterInterface) {
             throw new Exception\DomainException(sprintf(
@@ -505,7 +508,7 @@ class Form extends Fieldset implements FormInterface
         if (!$result) {
             $this->setMessages($filter->getMessages());
         }
-
+        
         return $result;
     }
 

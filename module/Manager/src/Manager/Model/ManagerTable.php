@@ -48,7 +48,7 @@ class ManagerTable extends AbstractTableGateway
     {
         $data = array(
             'id' => $manager->id,
-            'username'  => $manager->username,
+            'user_name'  => $manager->user_name,
             'password'  => $manager->password,
             
         );

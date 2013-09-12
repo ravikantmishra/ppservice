@@ -1,6 +1,6 @@
 <?php 
 /* Organization: OSSCube
- * Added:  Vinod Maurya 
+ * Added:  Vinod k Maurya 
  * Scope:  Admin login Class
  * Dated: 03/09/2013
  * */
@@ -24,6 +24,9 @@ use Manager\Model\Entity\AdminEntity;
 use Manager\Model\Entity\ContactEntity;
 use Manager\Model\Entity\FeedbackEntity;
 use Manager\Model\Entity\RegisterEntity;
+use Zend\Db\Sql\Select;
+use Zend\Paginator\Paginator;
+use Zend\Paginator\Adapter\Iterator as paginatorIterator;
 
 
 class ManagerController extends AbstractActionController
@@ -68,7 +71,7 @@ class ManagerController extends AbstractActionController
     public function getAdminTable()
     {
     	if (!$this->adminTable) {
-    		$this->adminTable = $this->getServiceLocator ()->get ( 'AdminTable' );
+    		$this->adminTable = $this->getServiceLocator()->get ( 'AdminTable' );
     	}
     	return $this->adminTable;
     }
@@ -79,19 +82,26 @@ class ManagerController extends AbstractActionController
     public function getContactTable()
     {
     	if (!$this->contactTable) {
-    		$this->contactTable = $this->getServiceLocator ()->get ( 'ContactTable' );
+    		$this->contactTable = $this->getServiceLocator()->get ('ContactTable');
     	}
     	return $this->contactTable;
     }
-    
+  
+    /*
+     *  Function use for getting the object of feedback table class
+    */
     
     public function getFeedbackTable()
     {
     	if (!$this->feedbackTable) {
-    		$this->feedbackTable = $this->getServiceLocator ()->get ('FeedbackTable');
+    		$this->feedbackTable = $this->getServiceLocator()->get ('FeedbackTable');
     	}
     	return $this->feedbackTable;
     }
+
+    /*
+     *  Function use for getting the object of register table class
+    */
     
     
     public function getRegisterTable()
@@ -102,10 +112,7 @@ class ManagerController extends AbstractActionController
     	return $this->userTable;
     }
     
-    
-    
-    
-    
+ 
     
     /*
      *  Function use for define the service of manager  class
@@ -156,10 +163,12 @@ class ManagerController extends AbstractActionController
     		$messages="Sorry Your username or password is incorrect.";
     		return $this->redirect()->toRoute('manager', array('action' => 'index','flashMessages'=> $this->flashmessenger()->getMessages()));
     	}
-	    
     	$this->flashmessenger()->addMessage($messages);
+    	$flashMessage = $this->flashmessenger()->getMessages();
+    	$this->flashMessenger()->clearCurrentMessages();
+    	$this->flashMessenger()->clearMessages();
     	return array(
-    			'flashMessages'  => $this->flashmessenger()->getMessages()
+    			'flashMessages'  => $flashMessage,
     	);
     } 
     
@@ -169,9 +178,13 @@ class ManagerController extends AbstractActionController
      * Function use for check the username and password for admin login
     */
     
+
+    
+    
     
   public function indexAction()
   {
+  	
 	   if ($this->getAuthService()->hasIdentity())
 	    {
 	    	return $this->redirect()->toRoute('manager', array('action' => 'success'));
@@ -186,13 +199,13 @@ class ManagerController extends AbstractActionController
          {
 			$manager->exchangeArray($form->getData());
 			$authAdapter= $this->getAuthService()->getAdapter()
-                          ->setIdentity($request->getPost('username'))
+                          ->setIdentity($request->getPost('user_name'))
                            ->setCredential($request->getPost('password'));
              $result = $this->getAuthService()->authenticate();
              $resultnew= $authAdapter->getResultRowObject();
-                if ($result->isValid()) 
+             if ($result->isValid()) 
                 {
-					if ($this->getAuthService()->hasIdentity())
+				 if ($this->getAuthService()->hasIdentity())
 					{
 					  $adminsession=$resultnew->id;
 					  $config = new StandardConfig();
@@ -202,9 +215,9 @@ class ManagerController extends AbstractActionController
 					  $messages="Welcome to administrator";
 					  $this->flashmessenger()->addMessage($messages);
 					  return $this->redirect()->toRoute('manager', array('action' => 'success'));
+					  $this->getAuthService()->setStorage($this->getSessionStorage());
+					  $this->getAuthService()->getStorage()->write($request->getPost('user_name'));
 					}
-					$this->getAuthService()->setStorage($this->getSessionStorage());
-                    $this->getAuthService()->getStorage()->write($request->getPost('username'));
                 }
                 else
                 {
@@ -216,9 +229,9 @@ class ManagerController extends AbstractActionController
               
 			}
 			$flashMessages = $this->flashMessenger()->getMessages();
-	 			 return array('form' => $form,
-	 			 				'flashMessage' => $flashMessages,
-	 			 			);
+			$this->flashMessenger()->clearCurrentMessages();
+			$this->flashMessenger()->clearMessages();
+	 	    return array('form' => $form,'flashMessage' => $flashMessages,);
   		}
 
   	/*
@@ -229,13 +242,16 @@ class ManagerController extends AbstractActionController
     public function adduserAction()
     {
     	$container = new Container('namespace');
-        $container->adminsession;
+       
+        if($container->adminsession==""){
+        	return $this->redirect()->toRoute('manager',array('action'=>'index'));
+        }
         $manager = new Manager();
         $form = new AdminForm();
         $form->get('status')->setValue('1');
         $form->setInputFilter($manager->getInputFilter());
         $request = $this->getRequest();
-        if ($request->isPost()) 
+        if($request->isPost()) 
         {
         	$userObj = new AdminEntity();
         	$form->setInputFilter($userObj->getInputFilter());
@@ -259,13 +275,15 @@ class ManagerController extends AbstractActionController
     public function userlistAction()
     {
     	$container = new Container('namespace');
-    	$container->adminsession;
+    	if($container->adminsession==""){
+        	return $this->redirect()->toRoute('manager',array('action'=>'index'));
+        }
     	$manager = new Manager();
     	$form = new AdminForm();
     	$form->setInputFilter($manager->getInputFilter());
     	$flashMessages = $this->flashMessenger()->getMessages();
     	return new ViewModel(array(
-    			'userlist' => $this->getAdminTable()->fetchAll(),'form' => $form,'flashMessage' => $flashMessages,
+    			'userlist' => $this->getAdminTable()->fetchAll(),'form' => $form,'Message' => $flashMessages,
     	));
 	
     }
@@ -276,8 +294,12 @@ class ManagerController extends AbstractActionController
     
    public function contactlistdeleteAction()
    {
-   	$id = (int) $this->params()->fromRoute('id', 0);
-   	 
+   	
+   	$container = new Container('namespace');
+   	if($container->adminsession==""){
+   		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+   	}
+   	$id = (int) $this->params()->fromRoute('id', 0); 
    	if (!$id) {
    		return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
    	}
@@ -294,26 +316,27 @@ class ManagerController extends AbstractActionController
    
    public function feedbacklistdeleteAction()
    {
-   	
-   	$id = (int) $this->params()->fromRoute('id', 0);
+   	$container = new Container('namespace');
+   	if($container->adminsession=="")
+   	{
+   		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+   	}
    	 
-   	if (!$id) {
+   	$id = (int) $this->params()->fromRoute('id', 0);
+   	if (!$id)
+   	{
    		return $this->redirect()->toRoute('manager',array('action'=>'feedback'));
    	}
-   	$request = $this->getRequest();
-   	$this->getFeedbackTable()->deleteFeedback($id);
-   	$message="Record deleted Successfully.";
-   	$this->flashmessenger()->addMessage($message);
-   	return $this->redirect()->toRoute('manager',array('action'=>'feedback'));
+	   	$request = $this->getRequest();
+	   	$this->getFeedbackTable()->deleteFeedback($id);
+	   	$message="Record deleted Successfully.";
+	   	$this->flashmessenger()->addMessage($message);
+	   	return $this->redirect()->toRoute('manager',array('action'=>'feedback'));
    	
    	
    }
    
-   
-   
-   
-   
-    
+
     /*
      * Function use for delete admin user data 
     */
@@ -321,15 +344,22 @@ class ManagerController extends AbstractActionController
     
     Public function admindeleteAction()
     {
+    	$container = new Container('namespace');
+    	if($container->adminsession=="")
+    	{
+    		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+    	}
+    	 
     	$id = (int) $this->params()->fromRoute('id', 0);
-    	if (!$id) {
+    	if (!$id) 
+    	{
     		return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
     	}
-    	$request = $this->getRequest();
-    	$this->getAdminTable()->deleteAdmin($id);
-    	$message="Record deleted Successfully.";
-    	$this->flashmessenger()->addMessage($message);
-    	return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
+	    	$request = $this->getRequest();
+	    	$this->getAdminTable()->deleteAdmin($id);
+	    	$message="Record deleted Successfully.";
+	    	$this->flashmessenger()->addMessage($message);
+	    	return $this->redirect()->toRoute('manager',array('action'=>'userlist'));
     }
     	
     /*
@@ -339,20 +369,23 @@ class ManagerController extends AbstractActionController
     
     Public function registerlistdeleteAction()
     {
+    	$container = new Container('namespace');
+    	if($container->adminsession=="")
+    	{
+    		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+    	}
     	$id = (int) $this->params()->fromRoute('id', 0);
-    	if (!$id) {
+    	if (!$id) 
+    	{
     		return $this->redirect()->toRoute('manager',array('action'=>'register'));
     	}
-    	$request = $this->getRequest();
-    	$this->getRegisterTable()->deleteRegister($id);
-    	$message="Record deleted Successfully.";
-    	$this->flashmessenger()->addMessage($message);
-    	return $this->redirect()->toRoute('manager',array('action'=>'register'));
+	    	$request = $this->getRequest();
+	    	$this->getRegisterTable()->deleteRegister($id);
+	    	$message="Record deleted Successfully.";
+	    	$this->flashmessenger()->addMessage($message);
+	    	return $this->redirect()->toRoute('manager',array('action'=>'register'));
     }
-    
-    
-    
-    
+
     
     /*
      * Function use for delete contact  data
@@ -360,25 +393,36 @@ class ManagerController extends AbstractActionController
     
     
     function contactactivelistAction()
-    {
-    	$id = (int) $this->params()->fromRoute('id', 0);
-    	$status =  $this->params()->fromRoute('status', 'inactive');
-    	if($id!="" && $status!="")
-    	{
-    	$contact = $this->getContactTable()->getContact($id);
-    	if($contact->seen == 'active'){ $check = 'inactive'; }else {$check = 'active';}
-    	$this->getContactTable()->updateContact(array('seen'=>$check),array('id'=>$contact->id));
-    	return $this->redirect()->toRoute('manager',array('action'=>'contact'));
-    	}
+    {   
+    	$container = new Container('namespace');
+	    	if($container->adminsession=="")
+	    	{
+	    		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+	    	}
+    	 
+	    	$id = (int) $this->params()->fromRoute('id', 0);
+	    	$status =  $this->params()->fromRoute('status', 'inactive');
+	    	if($id!="" && $status!="")
+	    	{
+		    	$contact = $this->getContactTable()->getContact($id);
+		    	if($contact->seen == 'active'){ $check = 'inactive'; }else {$check = 'active';}
+		    	$this->getContactTable()->updateContact(array('seen'=>$check),array('id'=>$contact->id));
+		    	return $this->redirect()->toRoute('manager',array('action'=>'contact'));
+	    	}
     }
-    
 
     /*
      * Function use for  feed back active deactive functinality
     */
 
     function feedbackactivelistAction()
-    {
+    {	
+    	$container = new Container('namespace');
+    	if($container->adminsession=="")
+    	{
+    		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+    	}
+    	 
     	$id = (int) $this->params()->fromRoute('id', 0);
     	$status =  $this->params()->fromRoute('status', 'inactive');
     	if($id!="" && $status!="")
@@ -398,9 +442,14 @@ class ManagerController extends AbstractActionController
     
     function activeuserlistAction()
     {
-    	
+    	$container = new Container('namespace');
+    	if($container->adminsession=="")
+    	{
+    		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+    	}
+    	 
     	$id = (int) $this->params()->fromRoute('id', 0);
-    	$status = (int) $this->params()->fromRoute('status', 0);
+    	$status = $this->params()->fromRoute('status');
     	if($id!="" && $status!="")
     	{
 	    	$contact = $this->getAdminTable()->getAdmin($id);
@@ -418,6 +467,11 @@ class ManagerController extends AbstractActionController
 
     function registeractivelistAction()
     {
+    	$container = new Container('namespace');
+    	if($container->adminsession==""){
+    		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+    	}
+    	 
     	$id = (int) $this->params()->fromRoute('id', 0);
     	$status =  $this->params()->fromRoute('status', 'inactive');
     	if($id!="" && $status!="")
@@ -429,36 +483,44 @@ class ManagerController extends AbstractActionController
     	}
     	 
     }
-    
-  
-    
-    /*
-     * Function use for admin user Action
-    */
-    
-    
-    public function adminuserAction()
-    {
-		$container = new Container('namespace');
-        $container->adminsession;
-    }
-    
+   
     /*
      * Function use for change status for contact table
     */
     
     public function contactAction()
     {
-    	$container = new Container('namespace');
-    	$container->adminsession;
+    	
+   		$container = new Container('namespace');
+	   	if($container->adminsession=="")
+	   	{
+	   		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+	   	}
     	$manager = new Manager();
     	$flashMessages = $this->flashMessenger()->getMessages();
+    	$select = new Select();
+    	$order_by = $this->params()->fromRoute('order_by') ?
+    	$this->params()->fromRoute('order_by') : 'id';
+    	$order = $this->params()->fromRoute('order') ?
+    	$this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
+    	$page = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
+    	$contactData = $this->getContactTable()->fetchAll($select->order($order_by . ' ' . $order));
+    	$itemsPerPage = 10;
+    	$contactData->current();
+    	$paginator = new Paginator(new paginatorIterator($contactData));
+    	$paginator->setCurrentPageNumber($page)
+    	->setItemCountPerPage($itemsPerPage)
+    	->setPageRange(7);
+    	$flashMessages = $this->flashMessenger()->getMessages();
     	return new ViewModel(array(
-    			'contactlist' => $this->getContactTable()->fetchAll(),'flashMessage' => $flashMessages,
-    	));
-    	
+    			'order_by' => $order_by,
+    			'order' => $order,
+    			'page' => $page,
+    			'Message'=>$flashMessages,
+    			'contactlist' => $paginator,
+    	)); 
+
     }
-    
 
     /*
      * Function use for fetch all feedback table data
@@ -467,13 +529,34 @@ class ManagerController extends AbstractActionController
     public function feedbackAction()
     {
     	$container = new Container('namespace');
-    	$container->adminsession;
+    	if($container->adminsession=="")
+    	{
+    		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+    	}
     	$manager = new Manager();
     	$flashMessages = $this->flashMessenger()->getMessages();
+    	$select = new Select();
+    	$order_by = $this->params()->fromRoute('order_by') ?
+    	$this->params()->fromRoute('order_by') : 'id';
+    	$order = $this->params()->fromRoute('order') ?
+    	$this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
+    	$page = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
+    	$contactData = $this->getFeedbackTable()->fetchAll($select->order($order_by . ' ' . $order));
+    	$itemsPerPage = 10;
+    	$contactData->current();
+    	$paginator = new Paginator(new paginatorIterator($contactData));
+    	$paginator->setCurrentPageNumber($page)
+    	->setItemCountPerPage($itemsPerPage)
+    	->setPageRange(7);
+    	$flashMessages = $this->flashMessenger()->getMessages();
     	return new ViewModel(array(
-    			'feedbacklist' => $this->getFeedbackTable()->fetchAll(),'flashMessage' => $flashMessages,
+    			'order_by' => $order_by,
+    			'order' => $order,
+    			'page' => $page,
+    			'Message'=>$flashMessages,
+    			'feedbacklist' => $paginator,
     	));
-    	
+
     }
     
     /*
@@ -483,23 +566,38 @@ class ManagerController extends AbstractActionController
     
     public  function registerAction()
     {
-    	
-    	
-    	$container = new Container('namespace');
-    	$container->adminsession;
+	    $container = new Container('namespace');
+	   	if($container->adminsession=="")
+	   	{
+	   		return $this->redirect()->toRoute('manager',array('action'=>'index'));
+	   	}
+    	$flashMessages = $this->flashMessenger()->getMessages();
+    	$select = new Select();
+    	$order_by = $this->params()->fromRoute('order_by') ?
+    	$this->params()->fromRoute('order_by') : 'id';
+    	$order = $this->params()->fromRoute('order') ?
+    	$this->params()->fromRoute('order') : Select::ORDER_ASCENDING;
+    	$page = $this->params()->fromRoute('page') ? (int) $this->params()->fromRoute('page') : 1;
+    	$contactData = $this->getRegisterTable()->fetchAll($select->order($order_by . ' ' . $order));
+    	$itemsPerPage = 10;
+    	$contactData->current();
+    	$paginator = new Paginator(new paginatorIterator($contactData));
+    	$paginator->setCurrentPageNumber($page)
+    	->setItemCountPerPage($itemsPerPage)
+    	->setPageRange(7);
     	$flashMessages = $this->flashMessenger()->getMessages();
     	return new ViewModel(array(
-    			'listuser' => $this->getRegisterTable()->fetchAll(),'flashMessage' => $flashMessages,
+    			'order_by' => $order_by,
+    			'order' => $order,
+    			'page' => $page,
+    			'Message'=>$flashMessages,
+    			'listuser' => $paginator,
     	));
-    	 
     }
-    
-    
     /*
      * Function use for logout admin session 
     */
     
-
 	public function logoutAction()
     {
     	$config = new StandardConfig();

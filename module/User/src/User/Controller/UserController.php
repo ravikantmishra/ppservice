@@ -42,35 +42,47 @@ class UserController extends AbstractActionController {
 	// login action 
 	public function loginAction() {
 
-		$form = new LoginForm();
-		$form->get('submit')->setValue('Sign In');
+		$container = new Container('user');
+		$data= $container->frontidsession;
 		
-		$request = $this->getRequest();		
-		if ($request->isPost()) {
+		if(!$data){
+
+			$form = new LoginForm();
+			$form->get('submit')->setValue('Sign In');
 			
-			$login = new LoginEntity();
-			$form->setInputFilter($login->getInputFilter());		
-			$form->setData($request->getPost());
-			if ($form->isValid()) {
-				$login->exchangeArray($form->getData());
-				if ( $this->getUserTable()->validateUser($login) ){
-					return  $this->redirect()->toRoute('home');
-				}
-				else{
-					$message="The username and/or password is invalid.";
-					$this->flashmessenger()->addMessage($message);
+			$request = $this->getRequest();
+			if ($request->isPost()) {
+					
+				$login = new LoginEntity();
+				$form->setInputFilter($login->getInputFilter());
+				$form->setData($request->getPost());
+				if ($form->isValid()) {
+					$login->exchangeArray($form->getData());
+					if ( $this->getUserTable()->validateUser($login) ){
+						
+						$container = new Container('SiteLink');
+						$data= $container->LastVisitPage;						
+						if($data){
+							return  $this->redirect()->toRoute('apply');
+						}
+						return  $this->redirect()->toRoute('home');
+					}
+					else{
+						$message="The username and/or password is invalid.";
+						$this->flashmessenger()->addMessage($message);
+					}
 				}
 			}
-		}		
-		$flashMessages = $this->flashMessenger()->getCurrentMessages();
-		$this->flashMessenger()->clearCurrentMessages();
-		$this->flashMessenger()->clearMessages();
-		return array('loginForm' => $form,
-				'flashMessage' => $flashMessages,
-		);
-		
-		 
-				
+			$flashMessages = $this->flashMessenger()->getCurrentMessages();
+			$this->flashMessenger()->clearCurrentMessages();
+			$this->flashMessenger()->clearMessages();
+			
+			return array('loginForm' => $form,
+					'flashMessage' => $flashMessages,
+			);
+		}else {
+			return $this->redirect()->toRoute('home');
+		}				
 	}
 	
 	//register action

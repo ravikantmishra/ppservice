@@ -39,11 +39,11 @@ $this->headTitle($title);
 	<tr>
 		<td>
 		<?php 
-			if(isset($flashMessage) && !empty($flashMessage)) 
+			if(isset($Message) && !empty($Message)) 
 			{
 			?>
 		    	<?php 
-		    	foreach ($flashMessage as $msg)
+		    	foreach ($Message as $msg)
 		    	{
 		    	?>
 			  <div><?php echo $msg; ?></div>
@@ -97,7 +97,22 @@ $this->headTitle($title);
        <a href="<?php echo $this->url('manager',array('action'=>'feedbacklistdelete', 'id' => $row->id));?>" Onclick="return ConfirmDelete();">Delete</a>
        </td>
     </tr>
-    <?php endforeach; 
+    <?php endforeach;  ?>
+    
+    <tr>
+    <td align="center" colspan="6">
+   
+  <?php
+
+    echo $this->paginationControl(
+            $this->feedbacklist, 'Sliding', 'feedback-paginator-slide', array('route' => 'manager/feedback','order_by' => $this->order_by, 'order' => $this->order,'slug' => 'contact')
+    );
+   ?>
+
+    </td>
+    </tr>
+    
+    <?php 
 	 }
 	 else 
 	 {
