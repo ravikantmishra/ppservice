@@ -100,7 +100,7 @@ class RegisterEntity implements InputFilterAwareInterface
             
             $inputFilter->add(
                 $factory->createInput(
-                    array('name' => 'first_name', 'required' => true, 
+                    array('name' => 'first_name', 'required' => false,
                         'filters' => array(array('name' => 'StripTags'), 
                             array('name' => 'StringTrim')), 
                         'validators' => array(
@@ -110,7 +110,7 @@ class RegisterEntity implements InputFilterAwareInterface
             
             $inputFilter->add(
                 $factory->createInput(
-                    array('name' => 'last_name', 'required' => true, 
+                    array('name' => 'last_name', 'required' => false, 
                         'filters' => array(array('name' => 'StripTags'), 
                             array('name' => 'StringTrim')), 
                         'validators' => array(
