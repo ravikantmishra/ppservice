@@ -10,17 +10,17 @@ return array(
     'router' => array(
         'routes' => array(
             'apply' => array('type' => 'segment', 
-                'options' => array('route' => '/apply', 
+                'options' => array('route' => '/application', 
                     'defaults' => array(
                         'controller' => 'Passport\Controller\Passport', 
                         'action' => 'apply'))), 
             'passportAplication' => array('type' => 'segment', 
-                'options' => array('route' => '/passportAplication', 
+                'options' => array('route' => '/passport', 
                     'defaults' => array(
                         'controller' => 'Passport\Controller\Passport', 
                         'action' => 'applypassport'))), 
             'visaAplication' => array('type' => 'segment', 
-                'options' => array('route' => '/visaAplication', 
+                'options' => array('route' => '/visa', 
                     'defaults' => array(
                         'controller' => 'Passport\Controller\Passport', 
                         'action' => 'applyvisa'))), 

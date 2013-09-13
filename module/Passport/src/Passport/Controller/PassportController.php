@@ -100,9 +100,9 @@ class PassportController extends AbstractActionController
             foreach ($result as $key => $val) {
                 $country[$key + 1] = $val->name;
             }
-            $form = new ApplyForm($country);
+            $form = new PassportForm($country);
         } else {
-            $form = new ApplyForm();
+            $form = new PassportForm();
         }
         $form->get('submit')->setValue('Pay Now');
         
@@ -146,9 +146,9 @@ class PassportController extends AbstractActionController
             foreach ($result as $key => $val) {
                 $country[$key + 1] = $val->name;
             }
-            $form = new ApplyForm($country);
+            $form = new VisaForm($country);
         } else {
-            $form = new ApplyForm();
+            $form = new VisaForm();
         }
         $form->get('submit')->setValue('Pay Now');
         

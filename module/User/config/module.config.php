@@ -9,7 +9,7 @@ return array(
             'User\Controller\User' => 'User\Controller\UserController')), 
     'router' => array(
         'routes' => array(
-            'login' => array('type' => 'segment', 
+            'login' => array('type' => 'Literal', 
                 'options' => array('route' => '/login', 
                     'defaults' => array('controller' => 'User\Controller\User', 
                         'action' => 'login'))), 

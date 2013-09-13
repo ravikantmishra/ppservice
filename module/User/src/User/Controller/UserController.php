@@ -37,9 +37,9 @@ class UserController extends AbstractActionController
         return $this->_userTable;
     }
 
-    public function indexAction()
-    {
-    }
+//     public function indexAction()
+//     {
+//     }
 
     /**
      * display login form vaditae it and redirect it to home
