@@ -1,36 +1,35 @@
 <?php
 $form = $this->passportForm;
-											if(isset($flashMessage) && !empty($flashMessage))
-											{
-												if($flashMessage[1]['title']){
-													$form->get ( 'title' )->setValue($flashMessage[1]['title']);
-												}
-												if($flashMessage[1]['first_name']){
-													$form->get ( 'first_name' )->setValue($flashMessage[1]['first_name']);
-												}
-												if($flashMessage[1]['last_name']){
-													$form->get ( 'last_name' )->setValue($flashMessage[1]['last_name']);
-												}
-												if($flashMessage[1]['gender']){
-													$form->get ( 'gender' )->setValue($flashMessage[1]['gender']);
-												}
-												if($flashMessage[1]['address1']){
-													$form->get ( 'address1' )->setValue($flashMessage[1]['address1']);
-												}
-												if($flashMessage[1]['address2']){
-													$form->get ( 'address2' )->setValue($flashMessage[1]['address2']);
-												}
-												if($flashMessage[1]['email']){
-													$form->get ( 'email' )->setValue($flashMessage[1]['email']);
-												}
-												if($flashMessage[1]['state']){
-													$form->get ( 'state' )->setValue($flashMessage[1]['state']);
-												}
-												if($flashMessage[1]['country']){
-													$form->get ( 'country' )->setValue($flashMessage[1]['country']);
-												}
-											}											
-										?>
+if (isset($flashMessage) && !empty($flashMessage)) {
+    if ($flashMessage[1]['title']) {
+        $form->get('title')->setValue($flashMessage[1]['title']);
+    }
+    if ($flashMessage[1]['first_name']) {
+        $form->get('first_name')->setValue($flashMessage[1]['first_name']);
+    }
+    if ($flashMessage[1]['last_name']) {
+        $form->get('last_name')->setValue($flashMessage[1]['last_name']);
+    }
+    if ($flashMessage[1]['gender']) {
+        $form->get('gender')->setValue($flashMessage[1]['gender']);
+    }
+    if ($flashMessage[1]['address1']) {
+        $form->get('address1')->setValue($flashMessage[1]['address1']);
+    }
+    if ($flashMessage[1]['address2']) {
+        $form->get('address2')->setValue($flashMessage[1]['address2']);
+    }
+    if ($flashMessage[1]['email']) {
+        $form->get('email')->setValue($flashMessage[1]['email']);
+    }
+    if ($flashMessage[1]['state']) {
+        $form->get('state')->setValue($flashMessage[1]['state']);
+    }
+    if ($flashMessage[1]['country']) {
+        $form->get('country')->setValue($flashMessage[1]['country']);
+    }
+}
+?>
 <div class="clear"></div>
 <div class="wrapper">
 	<div class="clear">&nbsp;</div>
@@ -51,15 +50,19 @@ $form = $this->passportForm;
 				<div class="bodyContent">
 					<div class="dlForm multiForm">
                     <?php
-// 																				$form = $this->passportForm;
-																				$form->prepare ();
-																				$form->setAttribute ( 'action', $this->url ( 'savepassport' ) );
-																				echo $this->form ()->openTag ( $form );
-																				$this->headScript ()->appendFile ($this->basePath() . '/js/calendar.js');
-																				$this->headScript ()->appendFile ($this->basePath() . '/js/calendar-en.js');
-																				$this->headScript ()->appendFile ($this->basePath() . '/js/calendar-setup.js');
-																				$this->headScript ()->appendFile ( $this->basePath() . '/css/datePicker.css' );
-																				?>
+                    // $form = $this->passportForm;
+                    $form->prepare();
+                    $form->setAttribute('action', $this->url('savepassport'));
+                    echo $this->form()->openTag($form);
+                    $this->headScript()->appendFile(
+                        $this->basePath() . '/js/calendar.js');
+                    $this->headScript()->appendFile(
+                        $this->basePath() . '/js/calendar-en.js');
+                    $this->headScript()->appendFile(
+                        $this->basePath() . '/js/calendar-setup.js');
+                    $this->headScript()->appendFile(
+                        $this->basePath() . '/css/datePicker.css');
+                    ?>
             <div>
 							<!--Fieldset Section Starts Here-->
 
@@ -76,27 +79,26 @@ $form = $this->passportForm;
 								</dl>
 								<dl>
 									<dt><?php
-									$name = $form->get ( 'first_name' );
-									echo $this->formLabel ()->openTag ( $name ) . $name->getLabel ();
-									?>
+        $name = $form->get('first_name');
+        echo $this->formLabel()->openTag($name) . $name->getLabel();
+        ?>
 											<span class="red">*</span>
 											<?php
-											
-											$this->formLabel ()->closeTag ();
-											?>
+        
+        $this->formLabel()->closeTag();
+        ?>
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('first_name')); ?>                 <br>
 										<span class="error_msg"> 
 										
 										 <?php
-											if(isset($flashMessage) && !empty($flashMessage))
-											{
-												if( $flashMessage[0]['first_name']){
-														echo "First Name is Required";
-														}
-											}											
-										?>
+        if (isset($flashMessage) && !empty($flashMessage)) {
+            if ($flashMessage[0]['first_name']) {
+                echo "First Name is Required";
+            }
+        }
+        ?>
 										
 										</span>
 									</dd>
@@ -341,27 +343,26 @@ jQuery("#passport_application_date_of_birth_month, #passport_application_date_of
 								</dl>
 								<dl>
 									<dt><?php
-									$name = $form->get ( 'address1' );
-									echo $this->formLabel ()->openTag ( $name ) . $name->getLabel ();
-									?>
+        $name = $form->get('address1');
+        echo $this->formLabel()->openTag($name) . $name->getLabel();
+        ?>
 											<span class="red">*</span>
 											<?php
-											
-$this->formLabel ()->closeTag ();
-											?>
+        
+        $this->formLabel()->closeTag();
+        ?>
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('address1')); ?>                  <br>
 										<span class="error_msg">
 										
 										 <?php
-											if(isset($flashMessage) && !empty($flashMessage))
-											{
-												if( $flashMessage[0]['address1']){
-														echo "Address 1 is Required";
-														}
-											}											
-										?>
+        if (isset($flashMessage) && !empty($flashMessage)) {
+            if ($flashMessage[0]['address1']) {
+                echo "Address 1 is Required";
+            }
+        }
+        ?>
 										
 										 </span>
 									</dd>
@@ -377,53 +378,51 @@ $this->formLabel ()->closeTag ();
 								</dl>
 								<dl>
 									<dt><?php
-									$name = $form->get ( 'email' );
-									echo $this->formLabel ()->openTag ( $name ) . $name->getLabel ();
-									?>
+        $name = $form->get('email');
+        echo $this->formLabel()->openTag($name) . $name->getLabel();
+        ?>
 											<span class="red">*</span>
 											<?php
-											
-$this->formLabel ()->closeTag ();
-											?>
+        
+        $this->formLabel()->closeTag();
+        ?>
 									
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('email')); ?>                 <br>
 										<span id="emailMgs" class="error_msg">
 										 <?php
-											if(isset($flashMessage) && !empty($flashMessage))
-											{
-												if( $flashMessage[0]['email']){
-														echo "Email is Required";
-														}
-											}											
-										?>
+        if (isset($flashMessage) && !empty($flashMessage)) {
+            if ($flashMessage[0]['email']) {
+                echo "Email is Required";
+            }
+        }
+        ?>
 										 </span>
 									</dd>
 								</dl>
 								<dl>
 									<dt><?php
-									$name = $form->get ( 'state' );
-									echo $this->formLabel ()->openTag ( $name ) . $name->getLabel ();
-									?>
+        $name = $form->get('state');
+        echo $this->formLabel()->openTag($name) . $name->getLabel();
+        ?>
 											<span class="red">*</span>
 											<?php
-											
-$this->formLabel ()->closeTag ();
-											?>
+        
+        $this->formLabel()->closeTag();
+        ?>
 									</dt>
 									<dd>
                   <?php echo $this->formInput($form->get('state')); ?>                  <br>
 										<span class="error_msg">
 										
 										 <?php
-											if(isset($flashMessage) && !empty($flashMessage))
-											{
-												if( $flashMessage[0]['state']){
-														echo "State is Required";
-														}
-											}											
-										?>
+        if (isset($flashMessage) && !empty($flashMessage)) {
+            if ($flashMessage[0]['state']) {
+                echo "State is Required";
+            }
+        }
+        ?>
 										 </span>
 									</dd>
 								</dl>
