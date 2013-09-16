@@ -11,6 +11,7 @@ use Zend\Session\Container;
 use Passport\Form\PassportForm;
 use Passport\Model\Entity\ApplicationEntity;
 use Passport\Form\VisaForm;
+use Passport\Form\CreditCardForm;
 
 class PassportController extends AbstractActionController
 {
@@ -100,7 +101,7 @@ class PassportController extends AbstractActionController
             foreach ($result as $key => $val) {
                 $country[$key + 1] = $val->name;
             }
-            $form = new PassportForm($country);
+            $form = new PassportForm(array('country' => $country));
         } else {
             $form = new PassportForm();
         }
@@ -146,7 +147,7 @@ class PassportController extends AbstractActionController
             foreach ($result as $key => $val) {
                 $country[$key + 1] = $val->name;
             }
-            $form = new VisaForm($country);
+            $form = new VisaForm(array('country' => $country));
         } else {
             $form = new VisaForm();
         }
@@ -216,7 +217,9 @@ class PassportController extends AbstractActionController
                     $lastId = $this->getApplicationTable()->saveApplication(
                         $values);
                     if ($lastId) {
-                        die("insert data");
+                        // die("insert data");
+                        return $this->redirect()->toRoute('payment', 
+                            array('id' => $lastId));
                     } else {
                         // some error occured
                     }
@@ -322,4 +325,38 @@ class PassportController extends AbstractActionController
             return $this->redirect()->toRoute('login');
         }
     }
+
+    public function paymentAction()
+    {
+        $container = new Container('user');
+        $data = $container->frontidsession;
+        
+        if ($data) {
+            if ($this->params('id')) {
+                $result = $this->getApplicationTable()->fetchApplication(
+                    array('id' => $this->params('id')));
+                if ($result) {
+                    $countryResult = $this->getCountryTable()->fetchCountry();
+                    
+                    if ($countryResult) {
+                        foreach ($countryResult as $key => $val) {
+                            $country[$key + 1] = $val->name;
+                        }
+                        $result[0]['country'] = $country;
+                    }
+                    $form = new CreditCardForm($result);
+                    $form->get('submit')->setValue('Make Payment');
+                    
+                    return array('paymentForm' => $form);
+                } else {
+                    return $this->redirect()->toRoute('apply');
+                }
+            } else {
+                return $this->redirect()->toRoute('apply');
+            }
+        } else {
+            return $this->redirect()->toRoute('apply');
+        }
+    }
 }
+//http://passportservicesllc.com/index.php/payment?n=89Ol#1A1K1H1Ho

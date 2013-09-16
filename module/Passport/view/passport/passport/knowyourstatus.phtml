@@ -51,8 +51,8 @@
                     ?>
                   <tr class="" style="height: 30px;">
 									<td style="padding-left: 2px;" valign="top" align="left"><span><?php echo $count ?></span></td>
-									<td valign="top"><span><?php echo $value->type; ?></span></td>
-									<td valign="top"><span><?php echo $value->order_number; ?></span></td>
+									<td valign="top"><span><?php echo $value['type']; ?></span></td>
+									<td valign="top"><span><?php echo $value['order_number']; ?></span></td>
 									<td><table class="inside_table" cellpadding="2" cellspacing="0"
 											width="100%">
 
@@ -69,11 +69,11 @@
 															cellspacing="0" width="100%">
 															<tbody>
 																<tr>
-																	<td style="padding-left: 10px;" width="12%"><?php echo $value->id; ?></td>
-																	<td width="24%"><?php echo $value->first_name; ?></td>
-																	<td width="24%"><?php echo $value->last_name; ?></td>
+																	<td style="padding-left: 10px;" width="12%"><?php echo $value['id']; ?></td>
+																	<td width="24%"><?php echo $value['first_name']; ?></td>
+																	<td width="24%"><?php echo $value['last_name']; ?></td>
 																	<td width="12%">65.00</td>
-																	<td width="28%"><?php echo $value->created_date; ?></td>
+																	<td width="28%"><?php echo $value['created_date']; ?></td>
 																</tr>
 															</tbody>
 														</table></td>

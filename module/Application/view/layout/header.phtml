@@ -12,7 +12,7 @@
 	$data= $container->frontidsession;
 	if(!$data) {
 	?>
-	<a href="<?php echo $this->url('login'); ?>">
+	<a href="<?php echo $this->serverurl().'/index.php/login'; ?>">
 	<img alt="Login" src="<?php $this->basepath('public')?>/images/login_img.png"></a>
 	<?php 
 	}else {

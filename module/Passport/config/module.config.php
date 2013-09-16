@@ -34,6 +34,12 @@ return array(
                     'defaults' => array(
                         'controller' => 'Passport\Controller\Passport', 
                         'action' => 'savevisa'))), 
+            'payment' => array('type' => 'segment', 
+                'options' => array('route' => '/payment[/[:id]]', 
+                    'constraints' => array('id' => '[a-zA-Z0-9]*'), 
+                    'defaults' => array(
+                        'controller' => 'Passport\Controller\Passport', 
+                        'action' => 'payment'))), 
             'knowyourstatus' => array('type' => 'segment', 
                 'options' => array('route' => '/knowyourstatus', 
                     'defaults' => array(

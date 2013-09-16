@@ -67,18 +67,7 @@ class VisaForm extends Form
                 'attributes' => array('type' => 'select', 'value' => 0), 
                 'name' => 'country', 
                 'options' => array('label' => 'Country:', 
-                    'value_options' => $values)));
-        
-        // $this->add(array(
-        // 'name' => 'town',
-        // 'attributes' => array(
-        // 'type' => 'text',
-        // 'id' => 'town',
-        // ),
-        // 'options' => array(
-        // 'label' => 'Town',
-        // ),
-        // ));
+                    'value_options' => $values['country'])));
         
         $this->add(
             array('name' => 'state', 
@@ -91,28 +80,6 @@ class VisaForm extends Form
                 'attributes' => array('type' => 'text', 
                     'required' => 'required', 'id' => 'state'), 
                 'options' => array('label' => 'Passport Number')));
-        
-        // $this->add(array(
-        // 'name' => 'zip',
-        // 'attributes' => array(
-        // 'type' => 'text',
-        // 'id' => 'zip',
-        // ),
-        // 'options' => array(
-        // 'label' => 'Zip',
-        // ),
-        // ));
-        
-        // $this->add(array(
-        // 'name' => 'phone',
-        // 'attributes' => array(
-        // 'type' => 'text',
-        // 'id' => 'phone',
-        // ),
-        // 'options' => array(
-        // 'label' => 'Phone Number',
-        // ),
-        // ));
         
         $this->add(
             array('name' => 'submit', 

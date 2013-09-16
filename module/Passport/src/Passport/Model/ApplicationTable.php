@@ -46,18 +46,14 @@ class ApplicationTable
      */
     public function fetchApplication($where = null)
     {
-        if (isset($where)) {
-            if ($this->tableGateway->select($where)) {
-                return $this->tableGateway->select($where);
-            } else {
-                return false;
-            }
+        $row = $this->tableGateway->select($where);
+        if (!$row) {
+            return false;
         } else {
-            if ($this->tableGateway->select()) {
-                return $this->tableGateway->select();
-            } else {
-                return false;
+            foreach ($row as $key => $val) {
+                $result[$key] = (array) $val;
             }
+            return $result;
         }
     }
 }
