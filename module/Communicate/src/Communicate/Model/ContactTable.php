@@ -1,20 +1,26 @@
-<?php 
-/*
- * Organization: OSSCube
-* Added: Sanchit Puri
-* Scope: Contact Table class interact with the database table contact
-* Dated: 05-09-2013
-*/
-
+<?php
+/**
+ * Organization: OSSCube 
+ * Added: Sanchit Puri 
+ * Scope: Contact Table Model class interact with the database table contact 
+ * Dated: 05-09-2013
+ */
 namespace Communicate\Model;
+
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\AbstractTableGateway;
+use Communicate\Model\Entity\Contact;
 
 class ContactTable extends AbstractTableGateway
 {
-    protected $table ='contact';
+    protected $table = 'contact';
 
+    /**
+     * used to construct the object of the ContactTable class
+     *
+     * @param Adapter $adapter            
+     */
     public function __construct(Adapter $adapter)
     {
         $this->adapter = $adapter;
@@ -23,24 +29,23 @@ class ContactTable extends AbstractTableGateway
         $this->initialize();
     }
 
-    public function fetchAll()
-    {
-        $resultSet = $this->select();
-        return $resultSet;
-    }
-	
-    // used to insert the data coming from contactus form into the database table contact
+    /**
+     * used to save the enquiry coming from contact us view form
+     *
+     * @param Contact $contact            
+     * @return boolean number
+     */
     public function saveContact(Contact $contact)
     {
-        $data = array(
-            'name'  => htmlentities($contact->name),
-            'email'  => htmlentities($contact->email),
-            'mobile_number'  => htmlentities($contact->phone),
-        	'comment'  => htmlentities($contact->enquiry),
-        );
+        $data = array('name' => htmlentities($contact->name), 
+            'email' => htmlentities($contact->email), 
+            'mobile_number' => htmlentities($contact->phone), 
+            'comment' => htmlentities($contact->enquiry));
         
-        if (!$this->insert($data))
-        	return false;
-        return $this->getLastInsertValue();
+        if (!$this->insert($data)) {
+            return false;
+        } else {
+            return $this->getLastInsertValue();
+        }
     }
 }

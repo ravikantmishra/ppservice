@@ -1,47 +1,47 @@
 
 
-<?php 
-if(isset($flashMessage) && !empty($flashMessage))
-{	
-?>
-	<div id = "flashMessageDiv" class = "green_highlight">
-	<?php 
-	foreach($flashMessage as $message)
-	{
-	?>
+<?php
+if (isset($flashMessage) && !empty($flashMessage)) {
+    ?>
+<div id="flashMessageDiv" class="green_highlight">
+	<?php
+    foreach ($flashMessage as $message) {
+        ?>
 	<p><?php echo $message;?></p>
-	<?php 
-	}
-	?>
+	<?php
+    }
+    ?>
 	</div>
-<?php 
+<?php
 }
 ?>
 
-<table class ="adminadduser">
-<tr class ="tablerow">
-<th>ID</th>
-<th>Template Name</th>
-<th>Created On</th>
-<th>Updated On</th>
-<th>Action</th>
-</tr>
+<table class="adminadduser">
+	<tr class="tablerow">
+		<th>ID</th>
+		<th>Template Name</th>
+		<th>Created On</th>
+		<th>Updated On</th>
+		<th>Action</th>
+	</tr>
 
-<?php foreach($templateArray as $templatesValue) 
-{
-?>
+<?php
+
+foreach ($templateArray as $templatesValue) {
+    ?>
 <tr>
-<td><?php echo $templatesValue['id'];?></td>
-<td><?php echo $templatesValue['template_name'];?></td>
-<td><?php echo $templatesValue['created_on'];?></td>
-<td><?php echo $templatesValue['updated_on'];?></td>
-<td><a href = "<?php echo $this->url('manager',array('action' => 'edittemplate', 'id' => $templatesValue['id']));?>">Edit</a></td>
-<?php 
+		<td><?php echo $templatesValue['id'];?></td>
+		<td><?php echo $templatesValue['template_name'];?></td>
+		<td><?php echo $templatesValue['created_on'];?></td>
+		<td><?php echo $templatesValue['updated_on'];?></td>
+		<td><a
+			href="<?php echo $this->url('manager',array('action' => 'edittemplate', 'id' => $templatesValue['id']));?>">Edit</a></td>
+<?php
 }
 ?>
 </tr>
 </table>
 
-<script type ="text/javascript">
+<script type="text/javascript">
 
 </script>

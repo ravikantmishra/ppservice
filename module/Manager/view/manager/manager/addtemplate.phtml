@@ -1,7 +1,6 @@
 
 <script>
 $(document).ready(function() {
-	//$("#templateBodyArea").ckeditor();
 	CKEDITOR.replace( 'templateBodyArea', {
 		uiColor: '#14B8C4',
 		toolbar: [
@@ -59,102 +58,113 @@ function insertElements(insertValue)
 }
 
 </script>
-<?php 
-if(isset($flashMessage) && !empty($flashMessage))
-{	
-?>
-	<div id = "flashMessageDiv" class = "green_highlight">
-	<?php 
-	foreach($flashMessage as $message)
-	{
-	?>
+<?php
+if (isset($flashMessage) && !empty($flashMessage)) {
+    ?>
+<div id="flashMessageDiv" class="green_highlight">
+	<?php
+    foreach ($flashMessage as $message) {
+        ?>
 	<p><?php echo $message;?></p>
-	<?php 
-	}
-	?>
+	<?php
+    }
+    ?>
 	</div>
-<?php 
+<?php
 }
 ?>
-<?php 
+<?php
+
 $form = $this->newTemplate;
-$form->setAttribute ( 'action', $this->url( 'manager', array ('action' => 'saveTemplate')));
-$form->setAttribute ( 'method', 'post' );
-$form->setAttribute ( 'id', 'frm');
-$form->setAttribute ( 'name', 'frm');
-//$form->setAttribute ( 'class', 'dlForm multiForm');
-//$form->setAttribute('onsubmit', 'return formValidate()');
-$form->prepare ();
-echo $this->form ()->openTag ( $form );
+$form->setAttribute('action', 
+    $this->url('manager', array('action' => 'saveTemplate')));
+$form->setAttribute('method', 'post');
+$form->setAttribute('id', 'frm');
+$form->setAttribute('name', 'frm');
+// $form->setAttribute ( 'class', 'dlForm multiForm');
+// $form->setAttribute('onsubmit', 'return formValidate()');
+$form->prepare();
+echo $this->form()->openTag($form);
 
 ?>
 <table>
-		<tr>
-			<td>
+	<tr>
+		<td>
 	           <?php
-	           $id = $form->get ( 'id' ); 
-	           echo $this->formhidden($id) ?>
+            $id = $form->get('id');
+            echo $this->formhidden($id)?>
 	         </td>
-	    </tr>
-		<tr>
-			<td>
-	      		<table>
-	        		<tr>
-	         			<td>
+	</tr>
+	<tr>
+		<td>
+			<table>
+				<tr>
+					<td>
 	                    	<?php
-							$templateName = $form->get ( 'templateName' );
-							echo $this->formLabel()->openTag($templateName) . $templateName->getLabel();
-							?>
-							<?php $this->formLabel()->closeTag();
-							?>
+                    $templateName = $form->get('templateName');
+                    echo $this->formLabel()->openTag($templateName) .
+                         $templateName->getLabel();
+                    ?>
+							<?php
+    
+    $this->formLabel()->closeTag();
+    ?>
 						</td>
-						<td>
-							<?php echo $this->formtext($templateName) ?>
+					<td>
+							<?php echo $this->formtext($templateName)?>
 						</td>
-			       		<td>
-			            	<div id ="errorMsg" style = "display:none;"></div>
-			       		</td>
-			 		</tr>
-			 		<tr>
-			        	<td>    
+					<td>
+						<div id="errorMsg" style="display: none;"></div>
+					</td>
+				</tr>
+				<tr>
+					<td>    
 			            	<?php
-							$templateSubject = $form->get ( 'templateSubject' );
-							echo $this->formLabel()->openTag($templateSubject) . $templateSubject->getLabel();
-							?>
-							<?php $this->formLabel()->closeTag();
-							?>
+                $templateSubject = $form->get('templateSubject');
+                echo $this->formLabel()->openTag($templateSubject) .
+                     $templateSubject->getLabel();
+                ?>
+							<?php
+    
+    $this->formLabel()->closeTag();
+    ?>
 						</td>
-						<td>
-			            	<?php echo $this->formtext($templateSubject) ?>
+					<td>
+			            	<?php echo $this->formtext($templateSubject)?>
 			            </td>
-			     	</tr>
-	          		<tr>
-	      		</table>
-	         	<table width="100%">
-	                   	<td>
-			            	<?php echo $this->formtextarea($form->get ( 'templateBody' )) ?>
+				</tr>
+				<tr>
+			
+			</table>
+			<table width="100%">
+				<td>
+			            	<?php echo $this->formtextarea($form->get ( 'templateBody' ))?>
 			            </td>
-			            <td>
-			            	<div style = "background-color: #14B8C4;">
-			            	<ul type ="none">
-							<li><a href = "javascript:void()" onclick = "javascript:insertElements('#userName#')">User Name</a></li>
-							<br/>
-							<li><a href = "javascript:void()" onclick = "javascript:insertElements('#email#')">Email</a></li>
-							<br/>
-							<li><a href = "javascript:void()" onclick = "javascript:insertElements('#password#')">Password</a></li>
-							<br/>
-							<li><a href = "javascript:void()" onclick = "javascript:insertElements('#url#')">URL</a></li>
-							</ul>
-							</div>
-			            </td>
-			         </tr>
-	         	</table>
-	    	</td>
-	    </tr>   
-	    <tr>
-	        <td colspan="2" >
+				<td>
+					<div style="background-color: #14B8C4;">
+						<ul type="none">
+							<li><a href="javascript:void()"
+								onclick="javascript:insertElements('#userName#')">User Name</a></li>
+							<br />
+							<li><a href="javascript:void()"
+								onclick="javascript:insertElements('#email#')">Email</a></li>
+							<br />
+							<li><a href="javascript:void()"
+								onclick="javascript:insertElements('#password#')">Password</a></li>
+							<br />
+							<li><a href="javascript:void()"
+								onclick="javascript:insertElements('#url#')">URL</a></li>
+						</ul>
+					</div>
+				</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
 	         	<?php echo $this->formSubmit($form->get('submit')); ?>
 	         </td>
-		</tr>
-	</table>
+	</tr>
+</table>
 <?php echo $this->form()->closeTag();?>
