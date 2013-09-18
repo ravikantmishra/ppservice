@@ -45,7 +45,7 @@ class FeedbackForm extends Form
             array('name' => 'txt_enquiry', 
                 'attributes' => array('type' => 'textarea', 
                     'id' => 'txt_enquiry', 'class' => 'flushMe'), 
-                'options' => array('label' => 'Enquiry:')));
+                'options' => array('label' => 'Feedback:')));
         
         $this->add(
             array('name' => 'submit', 
