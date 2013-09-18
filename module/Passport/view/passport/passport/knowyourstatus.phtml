@@ -1,91 +1,113 @@
 <div class="clear"></div>
 <div class="wrapper">
-  <div class="clear">&nbsp;</div>
-  <div class="container_main">
-    <div class="new_container">
-      <!--Heading Container Section Starts Here-->
-      <div class="heading_container">
-        <div class="heading_container_left"></div>
-        <div class="heading_containerbg">
-          <div class="page_heading">Application Status</div>
-        </div>
-        <div class="heading_container_right"></div>
-      </div>
-      <!--Heading Container Section Ends Here-->
-      <!--Form Inner/Inside Section Starts Here-->
-      <div class="form_inside_section">
-        <div class="bodyContent">
-          <div class="body_text" style="width:100%">
-            <table style="border:1px solid #CCC; margin:10px 0 0 0;" border="0" cellpadding="0" cellspacing="0" width="100%">
-                <tbody><tr bgcolor="#CCC">
-                  <td class="blbar" colspan="5" align="right">
-                    <div style="float:left"></div>
-                    <?php 
-                    	$data = $this->data;                    	
+	<div class="clear">&nbsp;</div>
+	<div class="container_main">
+		<div class="new_container">
+			<!--Heading Container Section Starts Here-->
+			<div class="heading_container">
+				<div class="heading_container_left"></div>
+				<div class="heading_containerbg">
+					<div class="page_heading">Application Status</div>
+				</div>
+				<div class="heading_container_right"></div>
+			</div>
+			<!--Heading Container Section Ends Here-->
+			<!--Form Inner/Inside Section Starts Here-->
+			<div class="form_inside_section">
+				<div class="bodyContent">
+					<div class="body_text" style="width: 100%">
+						<table style="border: 1px solid #CCC; margin: 10px 0 0 0;"
+							border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tbody>
+								<tr bgcolor="#CCC">
+									<td class="blbar" colspan="5" align="right">
+										<div style="float: left"></div>
+                    <?php
+                    $data = $this->data;
                     ?>
-                  <div style="padding-right:5px; background-color:#FFFFFF;">
-                    <span>Showing <b>1</b> - <b>10</b> of total  <b><?php echo count($data); ?></b>  results</span>
-                  </div>
-                  </td>
-                </tr>
+                  <div
+											style="padding-right: 5px; background-color: #FFFFFF;">
+											<span>Showing <b>1</b> - <b>10</b> of total <b><?php echo count($data); ?></b>
+												results
+											</span>
+										</div>
+									</td>
+								</tr>
 
-                <tr class="tr_bgcolor">
-                  <td valign="top" width="5%"><span class="txtBold" style="padding-left:2px;">S. No.</span></td>
-                  <td valign="top" width="10%"><span class="txtBold">App. Type</span></td>
-                  <td valign="top" width="20%"><span class="txtBold">Order Number</span></td>
-                  <td width="55%" align="center"><span class="txtBold">Application Details</span></td>
-                  <td style="padding-left:2px;" valign="top" width="10%"><span class="txtBold">Status</span></td>
-                </tr>
-                <?php 
-					
-					foreach($data as $key=>$value){
-					
-				?>
-                  <tr class="" style="height:30px;">
-                      <td style="padding-left:2px;" valign="top" align="left"><span><?php echo $value->id; ?></span></td>
-                      <td valign="top"><span><?php echo $value->type; ?></span></td>
-                      <td valign="top"><span><?php echo $value->order_number; ?></span></td>
-                    <td><table class="inside_table" cellpadding="2" cellspacing="0" width="100%">
-                      
-                      <tbody><tr style="background-color:#e2f1fe;">
-                        <td class="txtBold" width="12%">App. Id</td>
-                        <td class="txtBold" width="24%">First Name</td>
-                        <td class="txtBold" width="24%">Last Name</td>
-                        <td class="txtBold" width="12%">Amount</td>
-                        <td class="txtBold" width="28%">Created Date</td>
-                      </tr>
-                      <tr>
-                        <td colspan="5"><table class="dlForm" cellpadding="0" cellspacing="0" width="100%">
-                                                        <tbody><tr>
-                              <td style="padding-left:10px;" width="12%"><?php echo $value->id; ?></td>
-                              <td width="24%"><?php echo $value->first_name; ?></td>
-                              <td width="24%"><?php echo $value->last_name; ?></td>
-                              <td width="12%">65.00</td>
-                              <td width="28%"><?php echo $value->created_date; ?></td>
-                            </tr>
-                                                    </tbody></table></td>
-                      </tr>
-                    </tbody></table></td>
-                      <td style="padding-left:2px;" valign="top"><span><?php echo $value->status; ?></span></td>
-                  </tr>
-                   <?php 
-                                 	}
-                   ?>     
+								<tr class="tr_bgcolor">
+									<td valign="top" width="5%"><span class="txtBold"
+										style="padding-left: 2px;">S. No.</span></td>
+									<td valign="top" width="10%"><span class="txtBold">App. Type</span></td>
+									<td valign="top" width="20%"><span class="txtBold">Order Number</span></td>
+									<td width="55%" align="center"><span class="txtBold">Application
+											Details</span></td>
+									<td style="padding-left: 2px;" valign="top" width="10%"><span
+										class="txtBold">Status</span></td>
+								</tr>
+                <?php
+                $count = 1;
+                foreach ($data as $key => $value) {
+                    
+                    ?>
+                  <tr class="" style="height: 30px;">
+									<td style="padding-left: 2px;" valign="top" align="left"><span><?php echo $count ?></span></td>
+									<td valign="top"><span><?php echo $value['type']; ?></span></td>
+									<td valign="top"><span><?php echo $value['order_number']; ?></span></td>
+									<td><table class="inside_table" cellpadding="2" cellspacing="0"
+											width="100%">
+
+											<tbody>
+												<tr style="background-color: #e2f1fe;">
+													<td class="txtBold" width="12%">App. Id</td>
+													<td class="txtBold" width="24%">First Name</td>
+													<td class="txtBold" width="24%">Last Name</td>
+													<td class="txtBold" width="12%">Amount</td>
+													<td class="txtBold" width="28%">Created Date</td>
+												</tr>
+												<tr>
+													<td colspan="5"><table class="dlForm" cellpadding="0"
+															cellspacing="0" width="100%">
+															<tbody>
+																<tr>
+																	<td style="padding-left: 10px;" width="12%"><?php echo $value['id']; ?></td>
+																	<td width="24%"><?php echo $value['first_name']; ?></td>
+																	<td width="24%"><?php echo $value['last_name']; ?></td>
+																	<td width="12%">65.00</td>
+																	<td width="28%"><?php echo $value['created_date']; ?></td>
+																</tr>
+															</tbody>
+														</table></td>
+												</tr>
+											</tbody>
+										</table></td>
+									<td style="padding-left: 2px;" valign="top"><span><?php echo $value->status; ?></span></td>
+								</tr>
+                   <?php
+                    $count++;
+                }
+                ?>     
                   
-                  <tr bgcolor="#304f7d">
-                    <td colspan="5" height="18px" align="right">
-                      <div class="paging pagingFoot" style="padding-right:5px;">
-                        <span>1</span>  <a href="">2</a> <a href=""><img src="Passport%20Services%20LLC_files/next.png" border="0" align="absmiddle"></a><a href=""><img src="Passport%20Services%20LLC_files/last.png" border="0" align="absmiddle"></a>                      </div>
-                    </td>
-                  </tr>
+<!--                   <tr bgcolor="#304f7d"> -->
+								<!-- 									<td colspan="5" height="18px" align="right"> -->
+								<!-- 										<div class="paging pagingFoot" style="padding-right: 5px;"> -->
+								<!-- 											<span>1</span> <a href="">2</a> <a href=""><img -->
+								<!-- 												src="Passport%20Services%20LLC_files/next.png" border="0" -->
+								<!-- 												align="absmiddle"></a><a href=""><img -->
+								<!-- 												src="Passport%20Services%20LLC_files/last.png" border="0" -->
+								<!-- 												align="absmiddle"></a> -->
+								<!-- 										</div> -->
+								<!-- 									</td> -->
+								<!-- 								</tr> -->
 
-                              </tbody></table>
-            
-          </div>
-        </div>
-      </div>
-      <!--Form Inner/Inside Section Ends Here-->
-    </div>
-    <div class="container_bottombg"></div>
-  </div>
-</div><div class="clear"></div>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+			<!--Form Inner/Inside Section Ends Here-->
+		</div>
+		<div class="container_bottombg"></div>
+	</div>
+</div>
+<div class="clear"></div>
